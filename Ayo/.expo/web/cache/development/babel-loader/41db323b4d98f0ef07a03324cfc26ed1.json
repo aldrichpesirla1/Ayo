@@ -1,0 +1,1 @@
+{"ast":null,"code":"import homeScreen from \"./homeScreen\";\nexport { homeScreen };","map":{"version":3,"sources":["/home/martin/Documents/reactproj/Ayo/Ayo/src/screens/index.js"],"names":["homeScreen"],"mappings":"AAAA,OAAOA,UAAP;AAEA,SAAQA,UAAR","sourcesContent":["import homeScreen from './homeScreen';\n\nexport {homeScreen};"]},"metadata":{},"sourceType":"module"}
