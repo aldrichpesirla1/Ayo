@@ -11,7 +11,7 @@ export default function viewMedItemsScreen() {
             <View>
                   <FlatList 
                         data = {medItems}
-                        keyExtractor = {(item) => item.id}
+                        keyExtractor = {(item) => item.id.toString()}
                         renderItem = { ({item}) => {
                               return (
                                     <TouchableOpacity onPress= {() => navigation.navigate("MedItems", {itemData:item})}>
