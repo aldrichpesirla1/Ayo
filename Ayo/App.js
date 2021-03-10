@@ -4,15 +4,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import {homeScreen} from './src/screens/index';
+import {homeScreen, viewMedItemsScreen, medItemScreen } from './src/screens/index';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer initialRouteName="Home">
+    <NavigationContainer initialRouteName="Homes">
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={homeScreen} />
+        <Stack.Screen name="Homes" component={homeScreen} />
+        <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />
+        <Stack.Screen name="MedItems" component={medItemScreen} />
       </Stack.Navigator>      
     </NavigationContainer>
   );

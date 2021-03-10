@@ -3,11 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet} from 'react-native'
 
 import {HomeScreenButtons} from '../components/index';
 import {icons} from '../constants/icons'
-export default function homeScreen() {
+export default function homeScreen({navigation}) {
       return (
             <View>
                   <HomeScreenButtons buttonVals={[
-                        {title: "Screen1", img:icons.homeScreenButton1},
+                        {title: "View Medicine Items", img:icons.homeScreenButton1, screen:"ViewMedItems"},
                         {title: "Screen2", img:icons.homeScreenButton1 },
                         {title: "Screen3", img:icons.homeScreenButton1 }
                   ]}/>
