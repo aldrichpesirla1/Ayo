@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  api:
+    container_name: ayo_api
+    # basically tells docker compose to use Dockerfile here
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      # what port is inside and outside the dockerfile
+      # map localhost(left) with dockerfile (right)
+      - 8000:8000
+    volumes:
+      - .:/app
+    depends_on:
+      # run container below first before this container
+      - admin_db
+
+  admin_db:
+    container_name: ayo_db
+    image: mysql:5.7.22
+    # to restart if container fails
+    restart: always
+    environment:
+      MYSQL_DATABASE: ayo_django_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    # mapping files to container file
+    volumes:
+      - .dbdata:/var/lib/mysql
+    ports:
+      - 33067:3306
