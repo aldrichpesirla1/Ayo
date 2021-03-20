@@ -10,4 +10,4 @@ double check if @expo/vector-icons is available
 
 To run after pulling, execute
 
-npm start
+npm install
