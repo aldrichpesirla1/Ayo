@@ -4,15 +4,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import {loginScreen, homeScreen, viewMedItemsScreen, medItemScreen } from './src/screens/index';
+import {loginScreen, signupScreen, roleSelectScreen, homeScreen, viewMedItemsScreen, medItemScreen } from './src/screens/index';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer initialRouteName="Login">
+    <NavigationContainer initialRouteName="Log In">
       <Stack.Navigator>
-        <Stack.Screen name="LogIn" component={loginScreen} />
+        <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
+        <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
+        <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
         <Stack.Screen name="Homes" component={homeScreen} />
         <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />
         <Stack.Screen name="MedItems" component={medItemScreen} />
