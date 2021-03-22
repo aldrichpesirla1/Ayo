@@ -8,15 +8,15 @@ import {StyleSheet,
         SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const LogInScreen = () => {
-  const [usernameInput, recordUsernameInput] = useState('');//usernameInput is the variable which contains the username
-  const [passwordInput, recordPasswordInput] = useState('');//same applies to password
+const App = () => {
+  const [usernameInput, recordUsernameInput] = useState('');
+  const [passwordInput, recordPasswordInput] = useState('');
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style= {styles.Container}>
       <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
-        <View style={styles.FieldContainer}>
+        <View style={styles.TextFieldContainer}>
           <View>
             <TextInput 
                 placeholder = "Username"
@@ -37,7 +37,7 @@ const LogInScreen = () => {
             <TouchableOpacity style = {styles.LoginButton} onPress = {() => navigation.navigate("Homes")}>
               <Text style = {styles.ButtonText}>LOG IN</Text>
             </TouchableOpacity>
-            <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Sign Up")}>
+            <TouchableOpacity style = {styles.SignupButton}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
           </View>
@@ -46,7 +46,7 @@ const LogInScreen = () => {
   );
 }
 
-export default LogInScreen;
+export default App;
 
 const styles = StyleSheet.create(
   {
@@ -56,18 +56,19 @@ const styles = StyleSheet.create(
     Background: {
       width: '100%',
       height: '100%',
+      backgroundColor: 'black',
       alignSelf: 'center',
       justifyContent: 'center',
       position: 'relative',
       resizeMode: 'cover'
     },
-    FieldContainer:{
+    TextFieldContainer:{
       width: '100%',
-      height: '70%',
+      height: '56%',
       bottom: 0,
       alignSelf: 'flex-end',
       position: 'absolute',
-      justifyContent: 'center',
+      padding: 15 
     },
     UsernameField: {
       width: '70%',
