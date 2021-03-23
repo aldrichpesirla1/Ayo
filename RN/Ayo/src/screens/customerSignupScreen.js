@@ -1,36 +1,59 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, 
         Text, 
         View,
         TouchableOpacity,
+        Image,
         ImageBackground, 
         SafeAreaView,
-        TextInput} from 'react-native';
+        Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
-// copied from roleSelectScreen.js
-//still need to clean up on medical history and upload ID and how to connect data from this to back-end
+import * as ImagePicker from 'expo-image-picker';
 
 const customerSignUpScreen = () => { 
     const navigation = useNavigation();
-    
+
+    const [image, setImage] = useState(null);
+
+    useEffect(() => {
+      (async () => {
+        if (Platform.OS !== 'web') {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+          }
+        }
+      })();
+    }, []);
+
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      console.log(result); //Details of the uploaded image
+
+      if (!result.cancelled) {
+        setImage(result.uri);
+      }
+    };
 
     return (
         <SafeAreaView style= {styles.Container}>
           <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
             <View style={styles.ButtonContainer}>
               <View>
-                <Text style={styles.Text}>CUSTOMER</Text>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Homes")}>
+                <View style = {styles.ImagePreviewContainer}>
+                  {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
+                  <Text style = {styles.PlaceholderText}>
+                    ID Photo
+                  </Text>
+                </View>
+                <TouchableOpacity style = {styles.Button} onPress = {pickImage}>
                   <Text style = {styles.ButtonText}>UPLOAD ID</Text>
                 </TouchableOpacity>
-                  <TextInput 
-                    placeholder = "MedicalHistory"
-                    placeholderTextColor = '#dcdcdc'
-                    underlineColorAndroid = "transparent"
-              
-                    style = {styles.MedicalHistoryField}/>
-                
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Homes")}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
@@ -73,14 +96,6 @@ const styles = StyleSheet.create(
         padding: '3%',
         elevation: 3
       },
-      Text:{
-        color: '#ffffff',
-        fontSize: 40,
-        letterSpacing: 1,
-        fontFamily: 'Roboto',
-        fontWeight: 'bold',
-        alignSelf: 'center'
-      },
       ButtonText: {
         color: '#ffffff',
         fontSize: 15,
@@ -89,30 +104,37 @@ const styles = StyleSheet.create(
         fontWeight: 'bold'
       },
       SignupButton: {
-      borderWidth: 2,
-      borderColor: '#ffffff',
-      backgroundColor: 'transparent',
-      width: '70%',
-      alignSelf:'center',
-      alignItems:'center',
-      marginTop: '7%',
-      borderRadius: 15,
-      padding: '1%'
-    },
-    MedicalHistoryField: {
-        width: '70%',
-        padding: '1%',
-        borderRadius: 15,
+        borderWidth: 2,
         borderColor: '#ffffff',
+        backgroundColor: 'transparent',
+        width: '70%',
+        alignSelf:'center',
+        alignItems:'center',
+        marginTop: '7%',
+        borderRadius: 15,
+        padding: '1%'
+      },
+      ImagePreviewContainer:{
+        width: '50%',
+        flexDirection: 'row',
+        aspectRatio: 1,
+        elevation: 7,
         backgroundColor: '#ffffff',
-        textAlign: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center'
+      },
+      PlaceholderText: {
+        flexShrink: 1,
+        color: '#00d1a3',
+        fontSize: 18,
+        letterSpacing: 1,
         fontFamily: 'Roboto',
         fontWeight: 'bold',
-        fontSize: 17,
-        letterSpacing: 1,
-        marginTop: '3%',
-        marginBottom: '5%',
-        alignSelf:'center'
+        alignSelf: 'center'
+      },
+      ImagePreview: {
+        aspectRatio: 1,
+        resizeMode: 'contain'
       }
     }
   )
