@@ -7,15 +7,54 @@ import {StyleSheet,
         ImageBackground, 
         SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import {createSelector} from 'reselect';
+
+import {getSelectSignup, getUsername, getPassword, getPasswordConfirm, getContactNumber, getAddress} from '../redux/signupScreen/selectors';
+
+import {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} from '../redux/signupScreen/actions' 
+
+const actionDispatch = (dispatch) => ({
+  setUsername: (username) => dispatch(setUsername(username)),
+  setPassword: (password) => dispatch(setPassword(password)),
+  setPasswordConfirm: (password_confirm) => dispatch(setPasswordConfirm(password_confirm)),
+  setContactNumber: (contact_number) => dispatch(setContactNumber(contact_number)),
+  setAddress: (address) => dispatch(setAddress(address))
+})
+
+// being consistent with what is in Django
+const getLoginData = () => {
+  return (
+    {
+      username: useSelector(getUsername),
+      password: useSelector(getPassword),
+      password_confirm: useSelector(getPasswordConfirm),
+      contact_number: useSelector(getContactNumber),
+      address: useSelector(getAddress),
+    }
+  )
+}
 
 const SignUpScreen = () => {
-    const [usernameInput, recordUsernameInput] = useState('');
-    const [passwordInput, recordPasswordInput] = useState('');
-    const [contactNumberInput, recordContactNumberInput] = useState('');
-    const [addressInput, recordAddressInput] = useState('');
+    const signupData = useSelector(getSelectSignup);
+    const {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} = actionDispatch(useDispatch());
+    const {username, password, password_confirm, contact_number, address} = getLoginData(); 
+    // const [usernameInput, recordUsernameInput] = useState('');
+    // const [passwordInput, recordPasswordInput] = useState('');
+    // const [contactNumberInput, recordContactNumberInput] = useState('');
+    // const [addressInput, recordAddressInput] = useState('');
     const navigation = useNavigation();
 
-    return (
+    /* TODO: 
+        - INTEGRATE RED BORDER PARA SA: 
+          = LACKING ENTRIES ONPRESS SA REGISTER
+          = IF DILI MAO ANG PASSWORD UG PASSWORD_CONFIRM
+          = IF SOBRA ANG NUMBERS SA CONTACT NUMBER OR NAAY DILI NUMBER
+        - RESTRUCTURE KAY BASIN BATI NA TAN-AWON, I ADDED A PASSWORD CONFIRM TEXTINPUT
+        - CONNECT TO BACKEND API (AXIOS.POST)
+    */ 
+      return (
+    // NOTE: THIS COULD BE IMPLEMENTED VIA A FLATLIST SINCE GAMAY RAMAN UG DIFFERENCE ANG TEXTINPUTS
         <SafeAreaView style= {styles.Container}>
           <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
             <View style={styles.FieldContainer}>
@@ -24,7 +63,7 @@ const SignUpScreen = () => {
                     placeholder = "Username"
                     placeholderTextColor = '#dcdcdc'
                     underlineColorAndroid = "transparent"
-                    onChangeText = {(usernameInput) => recordUsernameInput(usernameInput)}
+                    onChangeText = {(usernameInput) => setUsername(usernameInput)}
                     style = {styles.UsernameField}/>
               </View>
               <View>
@@ -32,15 +71,26 @@ const SignUpScreen = () => {
                     placeholder = "Password"
                     placeholderTextColor = '#dcdcdc'
                     underlineColorAndroid = "transparent"
-                    onChangeText = {(passwordInput) => recordPasswordInput(passwordInput)}
+                    secureTextEntry
+                    onChangeText = {(passwordInput) => setPassword(passwordInput)}
+                    style = {styles.OtherFields}/>
+              </View>
+              <View>
+                <TextInput 
+                    placeholder = "Confirm Password"
+                    placeholderTextColor = '#dcdcdc'
+                    underlineColorAndroid = "transparent"
+                    secureTextEntry
+                    onChangeText = {(passwordInput) => setPasswordConfirm(passwordInput)}
                     style = {styles.OtherFields}/>
               </View>
               <View>
                 <TextInput 
                     placeholder = "Contact Number"
                     placeholderTextColor = '#dcdcdc'
+                    defaultValue = "09"
                     underlineColorAndroid = "transparent"
-                    onChangeText = {(contactNumberInput) => recordContactNumberInput(contactNumberInput)}
+                    onChangeText = {(contactNumberInput) => setContactNumber(contactNumberInput)}
                     style = {styles.OtherFields}/>
               </View>
               <View>
@@ -48,11 +98,14 @@ const SignUpScreen = () => {
                     placeholder = "Address"
                     placeholderTextColor = '#dcdcdc'
                     underlineColorAndroid = "transparent"
-                    onChangeText = {(addressInput) => recordAddressInput(addressInput)}
+                    onChangeText = {(addressInput) => setAddress(addressInput)}
                     style = {styles.OtherFields}/>
               </View>
               <View>
-                <TouchableOpacity style = {styles.NextButton} onPress = {() => navigation.navigate("Select Role")}>
+                <TouchableOpacity style = {styles.NextButton} onPress = {() => {
+                  console.log("Signup data is: ", signupData);                  
+                  navigation.navigate("Select Role")
+                }}>
                   <Text style = {styles.ButtonText}>NEXT</Text>
                 </TouchableOpacity>
               </View>

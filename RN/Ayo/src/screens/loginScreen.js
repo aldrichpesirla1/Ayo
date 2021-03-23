@@ -1,9 +1,3 @@
-/*
-TODO:
-- get password confirmation (frontend)
-0 verify if redux works (backend)
-*/
-
 import React, {useState} from 'react';
 import {StyleSheet, 
         Text, 
@@ -14,24 +8,33 @@ import {StyleSheet,
         SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
-import {createSelector} from 'reselect';
 
-import {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} from '../redux/loginScreen/actions' 
+import {getUsername, getPassword} from '../redux/loginScreen/selectors';
+import {setUsername, setPassword} from '../redux/loginScreen/actions' 
 
 const actionDispatch = (dispatch) => ({
   setUsername: (username) => dispatch(setUsername(username)),
-  setPassword: (password) => dispatch(setPasswords(password)),
-  setPasswordConfirm: (password_confirm) => dispatch(setPasswordConfirm(password_confirm)),
-  setContactNumber: (contact_number) => dispatch(setContactNumber(contact_number)),
-  setAddress: (address) => dispatch(setAddress(address))
+  setPassword: (password) => dispatch(setPassword(password)),
 })
 
-const LogInScreen = () => {
-  const {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} = actionDispatch(useDispatch());
+// being consistent with what is in Django const getLoginData = () => {
+const getLoginData = () => {
+  return (
+    {
+      username: useSelector(getUsername),
+      password: useSelector(getPassword),
+    }
+  )
+}
 
-  const [usernameInput, recordUsernameInput] = useState('');//usernameInput is the variable which contains the username
-  const [passwordInput, recordPasswordInput] = useState('');//same applies to password
+const LogInScreen = () => {
+  const {setUsername, setPassword}  = actionDispatch(useDispatch());
+  // const {loginData} = useSelector(stateSelector);
+  const {username, password} = getLoginData(); 
+  // const [usernameInput, recordUsernameInput] = useState('');//usernameInput is the variable which contains the username
+  // const [passwordInput, recordPasswordInput] = useState('');//same applies to password
   const navigation = useNavigation();
+
 
   return (
     <SafeAreaView style= {styles.Container}>
@@ -42,7 +45,7 @@ const LogInScreen = () => {
                 placeholder = "Username"
                 placeholderTextColor = '#dcdcdc'
                 underlineColorAndroid = "transparent"
-                onChangeText = {(usernameInput) => recordUsernameInput(usernameInput)}
+                onChangeText = {(usernameInput) => setUsername(usernameInput)}
                 style = {styles.UsernameField}/>
           </View>
           <View>
@@ -50,11 +53,15 @@ const LogInScreen = () => {
                 placeholder = "Password"
                 placeholderTextColor = '#dcdcdc'
                 underlineColorAndroid = "transparent"
-                onChangeText = {(passwordInput) => recordPasswordInput(passwordInput)}
+                secureTextEntry
+                onChangeText = {(passwordInput) => setPassword(passwordInput)}
                 style = {styles.PasswordField}/>
           </View>
           <View>
-            <TouchableOpacity style = {styles.LoginButton} onPress = {() => navigation.navigate("Homes")}>
+            <TouchableOpacity style = {styles.LoginButton} onPress = {() => {
+              console.log("Login data are: ", username, password);
+              navigation.navigate("Homes")
+            }}>
               <Text style = {styles.ButtonText}>LOG IN</Text>
             </TouchableOpacity>
             <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Sign Up")}>
