@@ -3,23 +3,28 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import {Provider} from 'react-redux';
 
-import {loginScreen, signupScreen, roleSelectScreen, homeScreen, viewMedItemsScreen, medItemScreen } from './src/screens/index';
+import {apiTestScreen, loginScreen, signupScreen, roleSelectScreen, homeScreen, viewMedItemsScreen, medItemScreen } from './src/screens/index';
+import store from './src/store';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer initialRouteName="Log In">
-      <Stack.Navigator>
-        <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
-        <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
-        <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
-        <Stack.Screen name="Homes" component={homeScreen} />
-        <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />
-        <Stack.Screen name="MedItems" component={medItemScreen} />
-      </Stack.Navigator>      
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer initialRouteName="Log In">
+        <Stack.Navigator>
+          <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
+          <Stack.Screen name="Api" component={apiTestScreen} />
+          <Stack.Screen name="Homes" component={homeScreen} />
+          <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />
+          <Stack.Screen name="MedItems" component={medItemScreen} />
+        </Stack.Navigator>      
+      </NavigationContainer>
+    </Provider>
   );
 }
 

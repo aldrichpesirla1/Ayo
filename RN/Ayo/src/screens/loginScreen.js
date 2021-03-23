@@ -1,3 +1,9 @@
+/*
+TODO:
+- get password confirmation (frontend)
+0 verify if redux works (backend)
+*/
+
 import React, {useState} from 'react';
 import {StyleSheet, 
         Text, 
@@ -7,8 +13,22 @@ import {StyleSheet,
         ImageBackground, 
         SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import {createSelector} from 'reselect';
+
+import {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} from '../redux/loginScreen/actions' 
+
+const actionDispatch = (dispatch) => ({
+  setUsername: (username) => dispatch(setUsername(username)),
+  setPassword: (password) => dispatch(setPasswords(password)),
+  setPasswordConfirm: (password_confirm) => dispatch(setPasswordConfirm(password_confirm)),
+  setContactNumber: (contact_number) => dispatch(setContactNumber(contact_number)),
+  setAddress: (address) => dispatch(setAddress(address))
+})
 
 const LogInScreen = () => {
+  const {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} = actionDispatch(useDispatch());
+
   const [usernameInput, recordUsernameInput] = useState('');//usernameInput is the variable which contains the username
   const [passwordInput, recordPasswordInput] = useState('');//same applies to password
   const navigation = useNavigation();
