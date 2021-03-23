@@ -4,34 +4,43 @@ import {StyleSheet,
         View,
         TouchableOpacity,
         ImageBackground, 
-        SafeAreaView} from 'react-native';
+        SafeAreaView,
+        TextInput} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const roleSelectScreen = () => {
+// copied from roleSelectScreen.js
+//still need to clean up on medical history and upload ID and how to connect data from this to back-end
+
+const CustomerScreen = () => { 
     const navigation = useNavigation();
+    
 
     return (
         <SafeAreaView style= {styles.Container}>
           <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
             <View style={styles.ButtonContainer}>
               <View>
-                <Text style={styles.Text}>USER TYPE</Text>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Customer Screen")}>
-                  <Text style = {styles.ButtonText}>CUSTOMER</Text>
-                </TouchableOpacity>
+                <Text style={styles.Text}>CUSTOMER</Text>
                 <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Homes")}>
-                  <Text style = {styles.ButtonText}>PHARMACY STAFF</Text>
+                  <Text style = {styles.ButtonText}>UPLOAD ID</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Homes")}>
-                  <Text style = {styles.ButtonText}>PHARMACY OWNER</Text>
-                </TouchableOpacity>
+                  <TextInput 
+                    placeholder = "MedicalHistory"
+                    placeholderTextColor = '#dcdcdc'
+                    underlineColorAndroid = "transparent"
+              
+                    style = {styles.MedicalHistoryField}/>
+                
+                <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Homes")}>
+              <Text style = {styles.ButtonText}>SIGN UP</Text>
+            </TouchableOpacity>
               </View>
             </View>
         </SafeAreaView>
     );
 }
 
-export default roleSelectScreen;
+export default CustomerScreen;
 
 const styles = StyleSheet.create(
     {
@@ -74,10 +83,36 @@ const styles = StyleSheet.create(
       },
       ButtonText: {
         color: '#ffffff',
-        fontSize: 20,
+        fontSize: 15,
         letterSpacing: 1,
         fontFamily: 'Roboto',
         fontWeight: 'bold'
+      },
+      SignupButton: {
+      borderWidth: 2,
+      borderColor: '#ffffff',
+      backgroundColor: 'transparent',
+      width: '70%',
+      alignSelf:'center',
+      alignItems:'center',
+      marginTop: '7%',
+      borderRadius: 15,
+      padding: '1%'
+    },
+    MedicalHistoryField: {
+        width: '70%',
+        padding: '1%',
+        borderRadius: 15,
+        borderColor: '#ffffff',
+        backgroundColor: '#ffffff',
+        textAlign: 'center',
+        fontFamily: 'Roboto',
+        fontWeight: 'bold',
+        fontSize: 17,
+        letterSpacing: 1,
+        marginTop: '3%',
+        marginBottom: '5%',
+        alignSelf:'center'
       }
     }
   )

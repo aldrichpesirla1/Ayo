@@ -5,5 +5,6 @@ import homeScreen from './homeScreen';
 import viewMedItemsScreen from './viewMedItemsScreen'
 import medItemScreen from './medItemScreen'
 import apiTestScreen from './apiTestScreen'
+import CustomerScreen from './CustomerScreen';
 
-export {loginScreen, signupScreen, roleSelectScreen, homeScreen, viewMedItemsScreen, medItemScreen, apiTestScreen};
+export {loginScreen, signupScreen, roleSelectScreen, homeScreen, viewMedItemsScreen, medItemScreen, apiTestScreen, CustomerScreen};
