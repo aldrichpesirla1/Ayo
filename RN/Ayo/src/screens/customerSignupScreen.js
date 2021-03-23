@@ -11,7 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 // copied from roleSelectScreen.js
 //still need to clean up on medical history and upload ID and how to connect data from this to back-end
 
-const CustomerScreen = () => { 
+const customerSignUpScreen = () => { 
     const navigation = useNavigation();
     
 
@@ -40,7 +40,7 @@ const CustomerScreen = () => {
     );
 }
 
-export default CustomerScreen;
+export default customerSignUpScreen;
 
 const styles = StyleSheet.create(
     {

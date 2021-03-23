@@ -5,7 +5,16 @@ import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import {Provider} from 'react-redux';
 
-import {apiTestScreen, loginScreen, signupScreen, roleSelectScreen, homeScreen, viewMedItemsScreen, medItemScreen, CustomerScreen } from './src/screens/index';
+import {apiTestScreen, 
+        loginScreen, 
+        signupScreen, 
+        customerSignupScreen,
+        pharmacyStaffSignupScreen,
+        pharmacyOwnerSignupScreen, 
+        roleSelectScreen, 
+        homeScreen, 
+        viewMedItemsScreen, 
+        medItemScreen} from './src/screens/index';
 import store from './src/store';
 
 const Stack = createStackNavigator();
@@ -18,7 +27,9 @@ export default function App() {
           <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
           <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
-          <Stack.Screen options={{headerShown: false}} name="Customer Screen" component={CustomerScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Customer Sign Up" component={customerSignupScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Staff Sign Up" component={pharmacyStaffSignupScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Owner Sign Up" component={pharmacyOwnerSignupScreen} />
           <Stack.Screen name="Api" component={apiTestScreen} />
           <Stack.Screen name="Homes" component={homeScreen} />
           <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />

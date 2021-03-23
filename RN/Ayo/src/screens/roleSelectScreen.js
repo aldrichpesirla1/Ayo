@@ -16,13 +16,13 @@ const roleSelectScreen = () => {
             <View style={styles.ButtonContainer}>
               <View>
                 <Text style={styles.Text}>USER TYPE</Text>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Customer Screen")}>
+                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Customer Sign Up")}>
                   <Text style = {styles.ButtonText}>CUSTOMER</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Homes")}>
+                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Staff Sign Up")}>
                   <Text style = {styles.ButtonText}>PHARMACY STAFF</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Homes")}>
+                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Owner Sign Up")}>
                   <Text style = {styles.ButtonText}>PHARMACY OWNER</Text>
                 </TouchableOpacity>
               </View>
