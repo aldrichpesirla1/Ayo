@@ -6,8 +6,17 @@ import {StyleSheet,
         ImageBackground, 
         SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {getRole, getSelectSignup} from '../redux/signupScreen/selectors';
+import {setRole} from '../redux/signupScreen/actions';
+
+const actionDispatch = (dispatch) => ({
+  setRole: (role) => dispatch(setRole(role)),
+})
 
 const roleSelectScreen = () => {
+    const {setRole} = actionDispatch(useDispatch());
     const navigation = useNavigation();
 
     return (
@@ -16,13 +25,22 @@ const roleSelectScreen = () => {
             <View style={styles.ButtonContainer}>
               <View>
                 <Text style={styles.Text}>USER TYPE</Text>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Customer Sign Up")}>
+                <TouchableOpacity style = {styles.Button} onPress = {() => {
+                  setRole("Customer");
+                  navigation.navigate("Customer Sign Up")
+                }}>
                   <Text style = {styles.ButtonText}>CUSTOMER</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Staff Sign Up")}>
+                <TouchableOpacity style = {styles.Button} onPress = {() => {
+                  setRole("Pharmacy Worker")
+                  navigation.navigate("Staff Sign Up")
+                }}>
                   <Text style = {styles.ButtonText}>PHARMACY STAFF</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.Button} onPress = {() => navigation.navigate("Owner Sign Up")}>
+                <TouchableOpacity style = {styles.Button} onPress = {() => {
+                  setRole("Owner")
+                  navigation.navigate("Owner Sign Up")}
+                }>
                   <Text style = {styles.ButtonText}>PHARMACY OWNER</Text>
                 </TouchableOpacity>
               </View>

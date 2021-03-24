@@ -1,3 +1,7 @@
+/*
+TODO:
+- check if uri still works for valid_id1
+*/
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, 
         Text, 
@@ -9,11 +13,21 @@ import {StyleSheet,
         Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {getSelectSignup, getValidId} from '../redux/signupScreen/selectors';
+import {setValidId} from '../redux/signupScreen/actions';
+
+const actionDispatch = (dispatch) => ({
+  setValidId: (valid_id1) => dispatch(setValidId(valid_id1)),
+})
 
 const customerSignUpScreen = () => { 
     const navigation = useNavigation();
-
+    const {setValidId} = actionDispatch(useDispatch());
     const [image, setImage] = useState(null);
+    const finalval = useSelector(getSelectSignup);
+    const valid_id1 = useSelector(getValidId);
 
     useEffect(() => {
       (async () => {
@@ -35,9 +49,10 @@ const customerSignUpScreen = () => {
 
       console.log(result); //Details of the uploaded image
 
-      if (!result.cancelled) {
-        setImage(result.uri);
-      }
+      if(result.cancelled)
+        return null;
+
+      setValidId(result.uri);
     };
 
     return (
@@ -46,6 +61,7 @@ const customerSignUpScreen = () => {
             <View style={styles.ButtonContainer}>
               <View>
                 <View style = {styles.ImagePreviewContainer}>
+                  {/* todo 1 */}
                   {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
                   <Text style = {styles.PlaceholderText}>
                     ID Photo
@@ -54,7 +70,10 @@ const customerSignUpScreen = () => {
                 <TouchableOpacity style = {styles.Button} onPress = {pickImage}>
                   <Text style = {styles.ButtonText}>UPLOAD ID</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Homes")}>
+                <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
+                  console.log("sa dili pa mubalhin ", finalval);
+                  navigation.navigate("Homes")}
+                }>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
               </View>

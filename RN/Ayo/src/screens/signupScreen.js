@@ -10,12 +10,13 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {createSelector} from 'reselect';
 
-import {getSelectSignup, getUsername, getPassword, getPasswordConfirm, getContactNumber, getAddress} from '../redux/signupScreen/selectors';
+import {getSelectSignup, getUsername, getName, getPassword, getPasswordConfirm, getContactNumber, getAddress} from '../redux/signupScreen/selectors';
 
-import {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} from '../redux/signupScreen/actions' 
+import {setUsername, setPassword, setName, setPasswordConfirm, setContactNumber, setAddress} from '../redux/signupScreen/actions' 
 
 const actionDispatch = (dispatch) => ({
   setUsername: (username) => dispatch(setUsername(username)),
+  setName: (name) => dispatch(setName(name)),
   setPassword: (password) => dispatch(setPassword(password)),
   setPasswordConfirm: (password_confirm) => dispatch(setPasswordConfirm(password_confirm)),
   setContactNumber: (contact_number) => dispatch(setContactNumber(contact_number)),
@@ -27,6 +28,7 @@ const getLoginData = () => {
   return (
     {
       username: useSelector(getUsername),
+      name: useSelector(getName),
       password: useSelector(getPassword),
       password_confirm: useSelector(getPasswordConfirm),
       contact_number: useSelector(getContactNumber),
@@ -37,8 +39,8 @@ const getLoginData = () => {
 
 const SignUpScreen = () => {
     const signupData = useSelector(getSelectSignup);
-    const {setUsername, setPassword, setPasswordConfirm, setContactNumber, setAddress} = actionDispatch(useDispatch());
-    const {username, password, password_confirm, contact_number, address} = getLoginData(); 
+    const {setUsername, setName, setPassword, setPasswordConfirm, setContactNumber, setAddress} = actionDispatch(useDispatch());
+    const {username, name, password, password_confirm, contact_number, address} = getLoginData(); 
     // const [usernameInput, recordUsernameInput] = useState('');
     // const [passwordInput, recordPasswordInput] = useState('');
     // const [contactNumberInput, recordContactNumberInput] = useState('');
@@ -58,6 +60,14 @@ const SignUpScreen = () => {
         <SafeAreaView style= {styles.Container}>
           <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
             <View style={styles.FieldContainer}>
+              <View>
+                <TextInput 
+                    placeholder = "Full name"
+                    placeholderTextColor = '#dcdcdc'
+                    underlineColorAndroid = "transparent"
+                    onChangeText = {(nameInput) => setName(nameInput)}
+                    style = {styles.UsernameField}/>
+              </View>
               <View>
                 <TextInput 
                     placeholder = "Username"

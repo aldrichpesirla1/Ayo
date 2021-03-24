@@ -9,10 +9,20 @@ import {StyleSheet,
         Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {getSelectSignup, getBusinessPermit} from '../redux/signupScreen/selectors';
+import {setBusinessPermit} from '../redux/signupScreen/actions';
+
+const actionDispatch = (dispatch) => ({
+  setBusinessPermit: (valid_id1) => dispatch(setBusinessPermit(valid_id1)),
+})
 
 const pharmacyOwnerSignUpScreen = () => { 
     const navigation = useNavigation();
-
+    const {setBusinessPermit} = actionDispatch(useDispatch());
+    const finalval = useSelector(getSelectSignup);
+    const business_permit = useSelector(getBusinessPermit);
     const [image, setImage] = useState(null);
 
     useEffect(() => {
@@ -35,9 +45,11 @@ const pharmacyOwnerSignUpScreen = () => {
 
       console.log(result); //Details of the uploaded image
 
-      if (!result.cancelled) {
-        setImage(result.uri);
-      }
+      if (result.cancelled)
+        return null;
+
+      setImage(result.uri);
+      setBusinessPermit(result.uri);
     };
 
     return (
@@ -54,7 +66,10 @@ const pharmacyOwnerSignUpScreen = () => {
                 <TouchableOpacity style = {styles.Button} onPress = {pickImage}>
                   <Text style = {styles.ButtonText}>UPLOAD PERMIT</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Homes")}>
+                <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
+                  console.log("sa dili pa musulod", finalval);
+                  navigation.navigate("Homes")
+                }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
               </View>

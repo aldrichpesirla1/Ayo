@@ -21,7 +21,7 @@ class User(AbstractUser):
     address = models.CharField(max_length=200)
     registration = models.DateTimeField(auto_now_add=True, blank=True)
     password = models.CharField(max_length=200, blank=True)
-    # valid_id1 = models.ImageField()
+    valid_id1 = models.ImageField()
     # valid_id2 = models.ImageField()
     role = models.CharField(max_length=10, null=True, blank=True)
     username = models.CharField(max_length=15, unique=True, null=True)
@@ -31,7 +31,7 @@ class User(AbstractUser):
 
 
 class Owner(User):
-    # business_permit = models.ImageField(blank=True, null=True)
+    business_permit = models.ImageField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Pharmacy Owner"
@@ -54,7 +54,7 @@ class Customer(User):
 
 
 class PharmacyWorker(User):
-    # medical_license = models.ImageField(blank=True, null=True)
+    medical_license = models.ImageField(blank=True, null=True)
     is_available = models.BooleanField(default=True)
 
     class Meta:

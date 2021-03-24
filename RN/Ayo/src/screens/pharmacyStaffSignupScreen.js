@@ -9,10 +9,20 @@ import {StyleSheet,
         Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {getSelectSignup, getMedicalLicense} from '../redux/signupScreen/selectors';
+import {setMedicalLicense} from '../redux/signupScreen/actions';
+
+const actionDispatch = (dispatch) => ({
+  setMedicalLicense: (valid_id1) => dispatch(setMedicalLicense(valid_id1)),
+})
 
 const pharmacyStaffSignUpScreen = () => { 
     const navigation = useNavigation();
-
+    const {setMedicalLicense} = actionDispatch(useDispatch());
+    const finalval = useSelector(getSelectSignup);
+    const medical_license = useSelector(getMedicalLicense);
     const [image, setImage] = useState(null);
 
     useEffect(() => {
@@ -35,9 +45,11 @@ const pharmacyStaffSignUpScreen = () => {
 
       console.log(result); //Details of the uploaded image
 
-      if (!result.cancelled) {
-        setImage(result.uri);
-      }
+      if (result.cancelled) 
+        return null;
+
+      setImage(result.uri);
+      setMedicalLicense(result.uri);
     };
 
     return (
@@ -54,7 +66,10 @@ const pharmacyStaffSignUpScreen = () => {
                 <TouchableOpacity style = {styles.Button} onPress = {pickImage}>
                   <Text style = {styles.ButtonText}>UPLOAD MED LICENSE</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Homes")}>
+                <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
+                  console.log("sa dili pa mulahos ", finalval);
+                  navigation.navigate("Homes");
+                }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
               </View>

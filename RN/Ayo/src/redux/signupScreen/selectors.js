@@ -14,6 +14,11 @@ export const getUsername = createSelector(
       (signupScreenState) => signupScreenState.username
 )
 
+export const getName = createSelector(
+      signupScreenState,
+      (signupScreenState) => signupScreenState.name
+)
+
 export const getPassword = createSelector(
       signupScreenState,
       (signupScreenState) => signupScreenState.password
@@ -32,4 +37,21 @@ export const getContactNumber = createSelector(
 export const getAddress = createSelector(
       signupScreenState,
       (signupScreenState) => signupScreenState.address
+)
+
+export const getRole = createSelector(
+      signupScreenState,
+      (signupScreenState) => signupScreenState.role
+)
+export const getValidId= createSelector(
+      signupScreenState,
+      (signupScreenState) => signupScreenState.valid_id1
+)
+export const getBusinessPermit = createSelector(
+      signupScreenState,
+      (signupScreenState) => signupScreenState.business_permit
+)
+export const getMedicalLicense= createSelector(
+      signupScreenState,
+      (signupScreenState) => signupScreenState.medical_license
 )
