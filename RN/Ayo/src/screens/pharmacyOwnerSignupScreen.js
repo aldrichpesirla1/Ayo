@@ -6,10 +6,11 @@ import {StyleSheet,
         Image,
         ImageBackground, 
         SafeAreaView,
-        Platform} from 'react-native';
+        Platform,} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import {useSelector, useDispatch} from 'react-redux';
+import json2formdata from 'json2formdata'
 
 import {getSelectSignup, getBusinessPermit} from '../redux/signupScreen/selectors';
 import {setBusinessPermit} from '../redux/signupScreen/actions';
@@ -24,6 +25,7 @@ const pharmacyOwnerSignUpScreen = () => {
     const finalval = useSelector(getSelectSignup);
     const business_permit = useSelector(getBusinessPermit);
     const [image, setImage] = useState(null);
+
 
     useEffect(() => {
       (async () => {
@@ -52,6 +54,7 @@ const pharmacyOwnerSignUpScreen = () => {
       setBusinessPermit(result.uri);
     };
 
+    
     return (
         <SafeAreaView style= {styles.Container}>
           <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
@@ -67,7 +70,9 @@ const pharmacyOwnerSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD PERMIT</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
-                  console.log("sa dili pa musulod", finalval);
+                  const dataToUpload = json2formdata(JSON.stringify(finalval));
+                  console.log("data wack: ", dataToUpload.get('name'));
+                  console.log("sa dili pa musulodskie", JSON.stringify(finalval));
                   navigation.navigate("Homes")
                 }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>

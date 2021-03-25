@@ -52,8 +52,9 @@ class Customer(User):
         verbose_name = "Customer"
 
     def save(self, *args, **kwargs):
+        print(*args)
         self.role = "Customer"
-        super(Owner, self).save(*args, **kwargs)
+        super(Customer, self).save(*args, **kwargs)
 
 
 class PharmacyWorker(User):
@@ -69,3 +70,4 @@ class PharmacyWorker(User):
             self.role = "Assistant"
         else:
             self.role = "Pharmacist"
+        super(PharmacyWorker, self).save(*args, **kwargs)

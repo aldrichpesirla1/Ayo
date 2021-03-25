@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from rest_framework import exceptions 
 
-from .serializers import UserSerializer
+from .serializers import PharmacyWorkerSerializer, UserSerializer
 from .models import User
 from .authentication import generate_access_token
 
@@ -12,10 +12,20 @@ from .authentication import generate_access_token
 def register(request):
       data = request.data
 
+      print(data)
+      print("length of data is ", end= '')
+      print(data['role'])
+
       if(data['password'] != data['password_confirm']):
             raise exceptions.APIException('Passwords do not match')
 
-      serializer = UserSerializer(data=data)
+      if data['role'] == 'Pharmacy Worker':
+            print("Pharma worker siya erp")
+            serializer = PharmacyWorkerSerializer(data=data)
+      elif data['role'] == 'Owner':
+            serializer = UserSerializer(data=data)
+      elif data['role'] == 'Customer':
+            serializer = UserSerializer(data=data)
       serializer.is_valid(raise_exception=True)
       serializer.save()
 

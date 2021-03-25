@@ -4,9 +4,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import {createSelector} from 'reselect';
 
 import {makeSelectUsers} from '../redux/testScreen/selectors';
-import testScreen from '../api/testScreen';
+import testScreen from '../api/Users';
 import setUsers from '../redux/testScreen/actions';
-import axios from 'axios';
 
 const stateSelector = createSelector(makeSelectUsers, (users) => ({
       users
