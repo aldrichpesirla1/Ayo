@@ -14,22 +14,26 @@ import {apiTestScreen,
         roleSelectScreen, 
         homeScreen, 
         viewMedItemsScreen, 
-        medItemScreen} from './src/screens/index';
+        medItemScreen,
+        testingscreen} from './src/screens/index';
 import store from './src/store';
+
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer initialRouteName="Log In">
+      <NavigationContainer initialRouteName= "Log In">
         <Stack.Navigator>
-          <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
+          <Stack.Screen name ="Testing Screen" component = {testingscreen}/>
           <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
           <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
           <Stack.Screen options={{headerShown: false}} name="Customer Sign Up" component={customerSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Staff Sign Up" component={pharmacyStaffSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Owner Sign Up" component={pharmacyOwnerSignupScreen} />
+          
           <Stack.Screen name="Api" component={apiTestScreen} />
           <Stack.Screen name="Homes" component={homeScreen} />
           <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />
