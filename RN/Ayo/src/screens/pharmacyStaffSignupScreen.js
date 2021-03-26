@@ -61,7 +61,8 @@ const pharmacyStaffSignUpScreen = () => {
       let match = /\.(\w+)$/.exec(filename);
       let type = match ? `image/${match[1]}` : `image`; 
       
-      setMedicalLicense({ uri: localUri, name: filename, type });
+      setMedicalLicense(localUri);
+      // setMedicalLicense({ uri: localUri, name: filename, type });
     };
 
     return (
@@ -83,7 +84,7 @@ const pharmacyStaffSignUpScreen = () => {
                   console.log("sa dili pa mulahos ", finalval);
                   usersApi.post('register', kani, {headers : {
                     'Content-Type': 'multipart/form-data',
-                  }})
+                  }}).then(err => console.log(err))
                   navigation.navigate("Homes");
                 }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>

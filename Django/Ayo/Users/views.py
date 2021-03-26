@@ -12,15 +12,17 @@ from .authentication import generate_access_token
 def register(request):
       data = request.data
 
-      print(data)
       print("length of data is ", end= '')
-      print(data['role'])
+      print(data.keys())
 
       if(data['password'] != data['password_confirm']):
             raise exceptions.APIException('Passwords do not match')
+      
+      print(type(data['medical_license']))
 
       if data['role'] == 'Pharmacy Worker':
             print("Pharma worker siya erp")
+            # data['medical_license'] = {uri: data.pop()}
             serializer = PharmacyWorkerSerializer(data=data)
       elif data['role'] == 'Owner':
             serializer = UserSerializer(data=data)

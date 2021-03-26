@@ -3,7 +3,7 @@
    continue this
    check if needed pa ba gyud ang separate labels
    check if needed ba nga vector ang cost_pairs a la class diag
-   """
+"""
 
 from django.db import models
 import uuid
