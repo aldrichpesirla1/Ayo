@@ -1,3 +1,7 @@
+/*
+TODO:
+- settle photo uploading issue
+*/
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, 
         Text, 
@@ -10,9 +14,11 @@ import {StyleSheet,
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import {useSelector, useDispatch} from 'react-redux';
+import json2formdata from 'json2formdata'
 
 import {getSelectSignup, getMedicalLicense} from '../redux/signupScreen/selectors';
 import {setMedicalLicense} from '../redux/signupScreen/actions';
+import usersApi from '../api/Users';
 
 const actionDispatch = (dispatch) => ({
   setMedicalLicense: (valid_id1) => dispatch(setMedicalLicense(valid_id1)),
@@ -49,7 +55,13 @@ const pharmacyStaffSignUpScreen = () => {
         return null;
 
       setImage(result.uri);
-      setMedicalLicense(result.uri);
+      let localUri = result.uri;
+      let filename = localUri.split('/').pop();
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`; 
+      
+      setMedicalLicense({ uri: localUri, name: filename, type });
     };
 
     return (
@@ -67,7 +79,11 @@ const pharmacyStaffSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD MED LICENSE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
+                  const kani = json2formdata(JSON.stringify(finalval))
                   console.log("sa dili pa mulahos ", finalval);
+                  usersApi.post('register', kani, {headers : {
+                    'Content-Type': 'multipart/form-data',
+                  }})
                   navigation.navigate("Homes");
                 }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>

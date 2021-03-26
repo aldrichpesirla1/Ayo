@@ -21,8 +21,6 @@ class User(AbstractUser):
     address = models.CharField(max_length=200)
     registration = models.DateTimeField(auto_now_add=True, blank=True)
     password = models.CharField(max_length=200, blank=True)
-    valid_id1 = models.ImageField()
-    # valid_id2 = models.ImageField()
     role = models.CharField(max_length=10, null=True, blank=True)
     username = models.CharField(max_length=15, unique=True, null=True)
 
@@ -31,7 +29,8 @@ class User(AbstractUser):
 
 
 class Owner(User):
-    business_permit = models.ImageField(blank=True, null=True)
+    business_permit = models.FileField(
+        upload_to='business_permit', blank=True, null=True)
 
     class Meta:
         verbose_name = "Pharmacy Owner"
@@ -42,19 +41,25 @@ class Owner(User):
 
 
 class Customer(User):
-    medical_record = models.TextField(max_length=200, null=True, blank=True)
+    valid_id1 = models.FileField(
+        upload_to='customer_ids', blank=True, null=True)
+    # valid_id2 = models.FileField()
+    medical_record = models.FileField(
+        upload_to='customer_medical_records', null=True, blank=True)
     is_verified = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Customer"
 
     def save(self, *args, **kwargs):
+        print(*args)
         self.role = "Customer"
-        super(Owner, self).save(*args, **kwargs)
+        super(Customer, self).save(*args, **kwargs)
 
 
 class PharmacyWorker(User):
-    medical_license = models.ImageField(blank=True, null=True)
+    medical_license = models.FileField(
+        upload_to='medical_licences', blank=True, null=True)
     is_available = models.BooleanField(default=True)
 
     class Meta:
@@ -65,3 +70,4 @@ class PharmacyWorker(User):
             self.role = "Assistant"
         else:
             self.role = "Pharmacist"
+        super(PharmacyWorker, self).save(*args, **kwargs)
