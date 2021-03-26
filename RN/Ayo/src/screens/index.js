@@ -8,6 +8,7 @@ import homeScreen from './homeScreen';
 import viewMedItemsScreen from './viewMedItemsScreen';
 import medItemScreen from './medItemScreen';
 import apiTestScreen from './apiTestScreen';
+import testingscreen from './testingscreen';
 
 
 export {loginScreen, 
@@ -19,4 +20,5 @@ export {loginScreen,
         homeScreen, 
         viewMedItemsScreen, 
         medItemScreen, 
-        apiTestScreen};
+        apiTestScreen,
+        testingscreen};
