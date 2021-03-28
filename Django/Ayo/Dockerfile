@@ -1,7 +1,7 @@
-FROM python:3.9-alpine
+FROM python:3.9
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --default-timeout=100 -r requirements.txt
 COPY . /app
 CMD python manage.py runserver 0.0.0.0:8000

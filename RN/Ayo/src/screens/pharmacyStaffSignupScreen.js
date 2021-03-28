@@ -61,7 +61,7 @@ const pharmacyStaffSignUpScreen = () => {
       let match = /\.(\w+)$/.exec(filename);
       let type = match ? `image/${match[1]}` : `image`; 
       
-      setMedicalLicense(localUri);
+      setMedicalLicense(result.uri);
       // setMedicalLicense({ uri: localUri, name: filename, type });
     };
 

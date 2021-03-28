@@ -26,7 +26,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer initialRouteName= "Log In">
         <Stack.Navigator>
-          <Stack.Screen name ="Testing Screen" component = {testingscreen}/>
+          {/* <Stack.Screen name ="Testing Screen" component = {testingscreen}/> */}
           <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
           <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
