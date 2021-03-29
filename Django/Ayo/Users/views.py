@@ -15,6 +15,19 @@ from .authentication import generate_access_token
 
 # Create your views here.
 
+# helper function to convert uri from RN to django-file for storage
+
+
+def uri_to_img(role, uri, username):
+    opened_img = urlretrieve(uri)
+    img = Image.open(opened_img[0])
+    img_io = BytesIO()
+    img.save(img_io, format='PNG')
+    imgtype = "id1" if role == "Customer" else "permit" if role == "Owner" else "license"
+    img_file = InMemoryUploadedFile(
+        img_io, None, username + imgtype + '.png', 'images/png', sys.getsizeof(img_io), None)
+    return img_file
+
 
 @api_view(['POST'])
 def register(request):
@@ -25,40 +38,22 @@ def register(request):
         raise exceptions.APIException('Passwords do not match')
 
     if data['role'] == 'Pharmacy Worker':
-        opened_img = urlretrieve(data['medical_license'])
-        img = Image.open(opened_img[0])
-        img_io = BytesIO()
-        img.save(img_io, format='PNG')
-        img_file = InMemoryUploadedFile(
-            img_io, None, data['username']+'license.png', 'images/png', sys.getsizeof(img_io), None)
-        new_data['medical_license'] = img_file
-
+        new_data['medical_license'] = uri_to_img(data['role'],
+                                                 data['medical_license'], data['username'])
         serializer = PharmacyWorkerSerializer(data=new_data)
 
     elif data['role'] == 'Owner':
-        opened_img = urlretrieve(data['valid_id1'])
-        img = Image.open(opened_img[0])
-        img_io = BytesIO()
-        img.save(img_io, format='PNG')
-        img_file = InMemoryUploadedFile(
-            img_io, None, data['username']+'id1.png', 'images/png', sys.getsizeof(img_io), None)
-        new_data['medical_license'] = img_file
-
+        new_data['business_permit'] = uri_to_img(data['role'],
+                                                 data['business_permit'], data['username'])
         serializer = UserSerializer(data=new_data)
-    elif data['role'] == 'Customer':
-        opened_img = urlretrieve(data['business_permit'])
-        img = Image.open(opened_img[0])
-        img_io = BytesIO()
-        img.save(img_io, format='PNG')
-        img_file = InMemoryUploadedFile(
-            img_io, None, data['username']+'permit.png', 'images/png', sys.getsizeof(img_io), None)
-        new_data['medical_license'] = img_file
 
+    elif data['role'] == 'Customer':
+        new_data['valid_id1'] = uri_to_img(data['role'],
+                                           data['business_permit'], data['username'])
         serializer = UserSerializer(data=new_data)
 
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    print("finished")
 
     return Response(serializer.data)
 
