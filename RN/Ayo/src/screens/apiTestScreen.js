@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react'
-import { View, Text } from 'react-native'
+import React, {useEffect, useState} from 'react'
+import { View, Text, Image, FlatList} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux';
 import {createSelector} from 'reselect';
 
@@ -17,19 +17,16 @@ const actionDispatch = (dispatch) => ({
 
 export default function apiTestScreen() {
       const valsel = useSelector(stateSelector);
-      const {users} = useSelector(stateSelector);
-      const {setUser} = actionDispatch(useDispatch());
-
-      console.log("Valsel is: ", valsel);
+      const [users, setUsers] = useState(); 
 
       const fetchUsers = async () => {
             console.log("Testscreen is: ", testScreen)
             // const response = await testScreen.get('http://localhost:8000/users/users').catch((err) => {
-            const response = await testScreen.get('users').catch( (err) => {
+            const response = await testScreen.get('unverifiedcustomers').catch( (err) => {
                   console.log("Error occured: ", err);
             })
-            console.log("Response is: ", response);
-
+            console.log("Response is ", response);
+            setUsers(response.data);
             // setUser(response.data);
       }
 
@@ -39,8 +36,23 @@ export default function apiTestScreen() {
             fetchUsers()
       },[])
 
+      
       return(
             <View>
+                  {/* <Image src={{uri: users[1]['valid_id1']}} style={{width:100, height:100}}/> */}
+                  <FlatList 
+                        data={users}
+                        keyExtractor= {(user) => user.username}
+                        renderItem = {({item}) => {
+                              return (
+                                    <View>
+                                          <Image source={{uri: item.valid_id1}}
+                                                style={{width:150, height:150}}
+                                          />
+                                    </View>
+                              )
+                        }}
+                  />
                   <Text>Hello</Text>
             </View>
       )
