@@ -15,7 +15,7 @@ from urllib.request import urlretrieve
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
-from .serializers import PharmacyWorkerSerializer, UserSerializer, OwnerSerializer, CustomerSerializer
+from .serializers import PharmacyWorkerSerializer, UserSerializer, OwnerSerializer, CustomerSerializer, CustomerViewSerializer
 from .models import User, PharmacyWorker, Customer
 from .authentication import generate_access_token
 
@@ -56,6 +56,7 @@ def register(request):
     elif data['role'] == 'Customer':
         new_data['valid_id1'] = uri_to_img(data['role'],
                                            data['valid_id1'], data['username'])
+        print("CUSTOMER VRO")
         serializer = CustomerSerializer(data=new_data)
 
     serializer.is_valid(raise_exception=True)
@@ -96,7 +97,7 @@ def users(request):
 @ api_view(['GET'])
 def unverifiedcustomers(request):
     unverified = Customer.objects.filter(is_verified=False).values();
-    serializer = CustomerSerializer(unverified, many=True, context={'request': request})
+    serializer = CustomerViewSerializer(unverified, many=True, context={'request': request})
     return Response(serializer.data)
 
 @ api_view(['PATCH'])

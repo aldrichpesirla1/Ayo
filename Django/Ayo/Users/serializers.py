@@ -34,6 +34,12 @@ class PharmacyWorkerSerializer(UserSerializer):
                   'address', 'password', 'medical_license']
 
 class CustomerSerializer(UserSerializer):
+    class Meta:
+        model = Customer 
+        fields = ['name', 'contact_number', 'username',
+                  'address', 'password', 'valid_id1']
+
+class CustomerViewSerializer(UserSerializer):
     valid_id1= serializers.SerializerMethodField('get_valid_id1_url')
     
     def get_valid_id1_url(self, obj):
