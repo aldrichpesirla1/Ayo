@@ -12,7 +12,6 @@ import uuid
 
 # AbstractUser so that we can use Django Authorization functions
 
-
 class User(AbstractUser):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, unique=True)
