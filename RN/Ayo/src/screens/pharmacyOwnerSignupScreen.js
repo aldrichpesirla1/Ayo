@@ -70,10 +70,10 @@ const pharmacyOwnerSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD PERMIT</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
-                  const dataToUpload = json2formdata(JSON.stringify(finalval));
-                  console.log("data wack: ", dataToUpload.get('name'));
-                  console.log("sa dili pa musulodskie", JSON.stringify(finalval));
-                  navigation.navigate("Homes")
+                  //const dataToUpload = json2formdata(JSON.stringify(finalval));
+                  //console.log("data wack: ", dataToUpload.get('name'));
+                  //console.log("sa dili pa musulodskie", JSON.stringify(finalval));
+                  navigation.navigate("Verify Customers")
                 }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
