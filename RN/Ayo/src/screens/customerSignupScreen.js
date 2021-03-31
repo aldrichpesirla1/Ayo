@@ -14,9 +14,11 @@ import {StyleSheet,
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import {useSelector, useDispatch} from 'react-redux';
+import json2formdata from 'json2formdata';
 
 import {getSelectSignup, getValidId} from '../redux/signupScreen/selectors';
 import {setValidId} from '../redux/signupScreen/actions';
+import usersApi from '../api/Users';
 
 const actionDispatch = (dispatch) => ({
   setValidId: (valid_id1) => dispatch(setValidId(valid_id1)),
@@ -52,6 +54,7 @@ const customerSignUpScreen = () => {
       if(result.cancelled)
         return null;
 
+      setImage(result.uri);
       setValidId(result.uri);
     };
 
@@ -71,8 +74,13 @@ const customerSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD ID</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
-                  console.log("sa dili pa mubalhin ", finalval);
-                  navigation.navigate("Homes")}
+                  const formdata = json2formdata(JSON.stringify(finalval))
+                  console.log("before ", formdata);
+                  usersApi.post('register', formdata, {headers : {
+                    'Content-Type': 'multipart/form-data',
+                  }}).then(err => console.log(err))
+                  navigation.navigate("Homes");
+                  }
                 }>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
