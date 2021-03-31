@@ -1,3 +1,9 @@
+"""
+TODO:
+- reconfigure api for possible roles
+"""
+
+
 from django.shortcuts import render
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework.decorators import api_view
@@ -92,3 +98,15 @@ def unverifiedcustomers(request):
     unverified = Customer.objects.filter(is_verified=False).values();
     serializer = CustomerSerializer(unverified, many=True, context={'request': request})
     return Response(serializer.data)
+
+@ api_view(['PATCH'])
+def approve_customer(request):
+    customer = Customer.objects.get(username=request.data['username']);
+    customer.approve()
+    return Response("Successful")
+
+@ api_view(['PATCH'])
+def reject_customer(request):
+    customer = Customer.objects.get(username=request.data['username']);
+    customer.reject()
+    return Response("Successful")
