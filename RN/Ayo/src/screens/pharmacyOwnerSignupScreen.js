@@ -75,7 +75,7 @@ const pharmacyOwnerSignUpScreen = () => {
                   usersApi.post('register', formdata, {headers : {
                     'Content-Type': 'multipart/form-data',
                   }}).then(err => console.log(err))
-                  navigation.navigate("Homes");
+                  navigation.navigate("Verify Customers");
                 }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
