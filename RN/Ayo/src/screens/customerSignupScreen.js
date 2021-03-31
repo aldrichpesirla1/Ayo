@@ -28,7 +28,7 @@ const customerSignUpScreen = () => {
     const [image, setImage] = useState(null);
     const finalval = useSelector(getSelectSignup);
     const valid_id1 = useSelector(getValidId);
-
+  
     useEffect(() => {
       (async () => {
         if (Platform.OS !== 'web') {
@@ -49,9 +49,10 @@ const customerSignUpScreen = () => {
 
       console.log(result); //Details of the uploaded image
 
-      if(result.cancelled)
+      if (result.cancelled)
         return null;
 
+      setImage(result.uri); //Do not remove this as this is to display the image
       setValidId(result.uri);
     };
 
@@ -61,7 +62,6 @@ const customerSignUpScreen = () => {
             <View style={styles.ButtonContainer}>
               <View>
                 <View style = {styles.ImagePreviewContainer}>
-                  {/* todo 1 */}
                   {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
                   <Text style = {styles.PlaceholderText}>
                     ID Photo
@@ -74,8 +74,8 @@ const customerSignUpScreen = () => {
                   console.log("sa dili pa mubalhin ", finalval);
                   navigation.navigate("Homes")}
                 }>
-              <Text style = {styles.ButtonText}>SIGN UP</Text>
-            </TouchableOpacity>
+                  <Text style = {styles.ButtonText}>SIGN UP</Text>
+                </TouchableOpacity>
               </View>
             </View>
         </SafeAreaView>
