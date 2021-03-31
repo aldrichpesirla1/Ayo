@@ -16,7 +16,8 @@ import {apiTestScreen,
         homeScreen, 
         viewMedItemsScreen, 
         medItemScreen,
-        testingscreen} from './src/screens/index';
+        testingscreen,
+        customerVerificationScreen} from './src/screens/index';
 import store from './src/store';
 
 
@@ -35,6 +36,8 @@ export default function App() {
           <Stack.Screen options={{headerShown: false}} name="Customer Sign Up" component={customerSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Staff Sign Up" component={pharmacyStaffSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Owner Sign Up" component={pharmacyOwnerSignupScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Verify Customers" component={customerVerificationScreen} />
+          
           
           <Stack.Screen name="Api" component={apiTestScreen} />
           <Stack.Screen name="Homes" component={homeScreen} />

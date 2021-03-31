@@ -1,3 +1,9 @@
+"""
+TODO:
+- reconfigure api for possible roles
+"""
+
+
 from django.shortcuts import render
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework.decorators import api_view
@@ -9,14 +15,14 @@ from urllib.request import urlretrieve
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
-from .serializers import PharmacyWorkerSerializer, UserSerializer
-from .models import User, PharmacyWorker
+from .serializers import PharmacyWorkerSerializer, UserSerializer, OwnerSerializer, CustomerSerializer
+from .models import User, PharmacyWorker, Customer
 from .authentication import generate_access_token
+
 
 # Create your views here.
 
 # helper function to convert uri from RN to django-file for storage
-
 
 def uri_to_img(role, uri, username):
     opened_img = urlretrieve(uri)
@@ -45,12 +51,12 @@ def register(request):
     elif data['role'] == 'Owner':
         new_data['business_permit'] = uri_to_img(data['role'],
                                                  data['business_permit'], data['username'])
-        serializer = UserSerializer(data=new_data)
+        serializer = OwnerSerializer(data=new_data)
 
     elif data['role'] == 'Customer':
         new_data['valid_id1'] = uri_to_img(data['role'],
-                                           data['business_permit'], data['username'])
-        serializer = UserSerializer(data=new_data)
+                                           data['valid_id1'], data['username'])
+        serializer = CustomerSerializer(data=new_data)
 
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -86,3 +92,21 @@ def users(request):
     print("In get")
     serializer = UserSerializer(User.objects.all(), many=True)
     return Response(serializer.data)
+
+@ api_view(['GET'])
+def unverifiedcustomers(request):
+    unverified = Customer.objects.filter(is_verified=False).values();
+    serializer = CustomerSerializer(unverified, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@ api_view(['PATCH'])
+def approve_customer(request):
+    customer = Customer.objects.get(username=request.data['username']);
+    customer.approve()
+    return Response("Successful")
+
+@ api_view(['PATCH'])
+def reject_customer(request):
+    customer = Customer.objects.get(username=request.data['username']);
+    customer.reject()
+    return Response("Successful")
