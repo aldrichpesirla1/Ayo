@@ -4,6 +4,7 @@ import roleSelectScreen from './roleSelectScreen';
 import customerSignupScreen from './customerSignupScreen';
 import pharmacyStaffSignupScreen from './pharmacyStaffSignupScreen';
 import pharmacyOwnerSignupScreen from './pharmacyOwnerSignupScreen';
+import confirmationScreen from './ownerConfirmationScreen';
 import homeScreen from './homeScreen';
 import viewMedItemsScreen from './viewMedItemsScreen';
 import medItemScreen from './medItemScreen';
@@ -18,6 +19,7 @@ export {loginScreen,
         customerSignupScreen,
         pharmacyStaffSignupScreen,
         pharmacyOwnerSignupScreen,
+        confirmationScreen,
         homeScreen, 
         viewMedItemsScreen, 
         medItemScreen, 

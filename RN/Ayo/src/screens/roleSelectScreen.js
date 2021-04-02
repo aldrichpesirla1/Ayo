@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState , useEffect} from 'react';
 import {StyleSheet, 
         Text, 
         View,
         TouchableOpacity,
         ImageBackground, 
-        SafeAreaView} from 'react-native';
+        SafeAreaView,
+        BackHandler,
+        Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -18,6 +20,28 @@ const actionDispatch = (dispatch) => ({
 const roleSelectScreen = () => {
     const {setRole} = actionDispatch(useDispatch());
     const navigation = useNavigation();
+
+    useEffect(() => {
+      const backAction = () => {
+        Alert.alert("Warning", "Go back the Log In screen? You will lose all your Sign Up information.", [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel"
+          },
+          { text: "YES", onPress: () => navigation.navigate("Log In") }
+        ]);
+        return true;
+      };
+  
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+  
+      return () => backHandler.remove();
+    }, []);
+  
 
     return (
         <SafeAreaView style= {styles.Container}>
