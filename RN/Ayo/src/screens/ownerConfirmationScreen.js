@@ -6,8 +6,11 @@ import {StyleSheet,
         TouchableOpacity,
         ImageBackground, 
         SafeAreaView,
-        FlatList} from 'react-native';
+        FlatList, 
+      Modal, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import VerificationScreen from '../modals/verificationScreen';
+import {Fontisto} from '@expo/vector-icons';
 
 const DATA = [ //example list for sample
   {
@@ -43,28 +46,103 @@ const DATA = [ //example list for sample
     title: "8th Item",
   },
 ];
+const tmpUsers = [
+  {
+      name: "mmm",
+      contact_number: "mmm",
+      username: "mmm",
+      address: "mmm",
+      valid_id1: require("../assets/favicon.png")
+  },
+  {
+      name: "yep",
+      contact_number: "yep",
+      username: "yep",
+      address: "yep",
+      valid_id1: require("../assets/favicon.png")
+  },
+  {
+      name: "Juan Dela Cruz",
+      contact_number: "0922331232",
+      username: "mrlabalaba",
+      address: "Kabangkalan, Mandaue",
+      valid_id1: require("../assets/favicon.png")
+  },
+    {
+      name: "Tom",
+      contact_number: "Tom",
+      username: "Tom",
+      address: "Cebu, Mandaue",
+      valid_id1: require("../assets/favicon.png")
+  },
+    {
+      name: "Jerry",
+      contact_number: "Jerry",
+      username: "Jerry",
+      address: "Jerry, Mandaue",
+      valid_id1: require("../assets/favicon.png")
+  },
+    {
+      name: "Pedro",
+      contact_number: "Pedro",
+      username: "Pedro",
+      address: "Pedro, Mandaue",
+      valid_id1: require("../assets/favicon.png")
+  },
+  {
+    name: "Penduko",
+    contact_number: "Penduko",
+    username: "Penduko",
+    address: "Penduko, Mandaue",
+    valid_id1: require("../assets/favicon.png")
+},
+{
+  name: "Jojo",
+  contact_number: "Jojo",
+  username: "Jojo",
+  address: "Jojo, Mandaue",
+  valid_id1: require("../assets/favicon.png")
+}
+]
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    <Text style={[styles.itemText, textColor]}>{item.title}</Text>
+    <Text style={[styles.itemText, textColor]}>{item.name}</Text>
   </TouchableOpacity>
 );
 
 const confirmationScreen = () => {
   const navigation = useNavigation();
-
+  const [modalVisible, setModalVisible] = useState(false); 
   const [selectedId, setSelectedId] = useState(null);
+  const [itemData, setItemData] = useState(null);
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? "transparent" : "#ffffff";
-    const color = item.id === selectedId ? 'white' : 'black';
+    const backgroundColor = item.username === selectedId ? "transparent" : "#ffffff";
+    const color = item.username === selectedId ? 'white' : 'black';
     return (
-      <Item
-        item={item}
-        onPress={() => setSelectedId(item.id)}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
-      />
+      
+      // <Item
+      //   item={item}
+      //   onPress={() => setSelectedId(item.username),
+      //   setModalVisible(!modalVisible)}
+      //   backgroundColor={{ backgroundColor }}
+      //   textColor={{ color }}
+      // />
+      <View style={styles.touchables}>
+                                    <TouchableOpacity item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
+                                        //setItemData(item);
+                                        setSelectedId(item.username)
+                                        setModalVisible(!modalVisible);
+                                    }}>
+                                        <Text>{item.name}</Text>
+                                        <Image source={item.valid_id1}
+                                        // <Image source={{uri: item.valid_id1}}
+                                            style={{width:150, height:150}}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+      
     );
   };
 
@@ -77,18 +155,39 @@ const confirmationScreen = () => {
         </Text>
         <SafeAreaView style={styles.ListContainer}>
           <FlatList
-            data={DATA} //list of users goes here
+            data={tmpUsers} //list of users goes here
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.username}
             extraData={selectedId} //User identifier
           />
+          <Modal 
+                    animationType = "slide"
+                    style = {styles.modal}
+                    transparent
+                    visible={modalVisible}
+                    onRequestClose = {() => {
+                           setModalVisible(false); 
+                    }}
+                >
+                <View>
+                    <View style={styles.modalContainer}>
+                            <View style={styles.modalView}>
+                                <TouchableOpacity style={{margin:100}} onPress = {() => setModalVisible(!modalVisible)}>
+                                        <Fontisto name="close" size={30}/>
+                                </TouchableOpacity>
+                                {/* TAN-AWA NI */}
+                                <VerificationScreen itemData={itemData}/>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
         </SafeAreaView>
-        <TouchableOpacity style = {styles.ConfirmButton} /*onPress={}*/>
+        {/* <TouchableOpacity style = {styles.ConfirmButton} >
           <Text style = {styles.ButtonText}>CONFIRM USER</Text>
         </TouchableOpacity>  
-        <TouchableOpacity style = {styles.ViewButton} /*onPress={}*/>
+        <TouchableOpacity style = {styles.ViewButton} >
           <Text style = {styles.ButtonText}>VIEW DETAILS</Text>
-        </TouchableOpacity>  
+        </TouchableOpacity>   */}
       </View>
     </SafeAreaView>
   );
@@ -180,6 +279,29 @@ const styles = StyleSheet.create(
       fontSize: 17,
       fontFamily: 'Roboto',
       letterSpacing: 0.3,
-    }
+    },
+    modal : {
+      width: '100%',
+      height: '100%',
+      margin: 0,
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    modalContainer : {
+        height:'100%',
+          justifyContent: "center",
+          alignItems: "flex-end",
+          flexDirection: 'row',
+    },
+    modalView : {
+          height: '75%',
+          width: '100%',
+          borderWidth: 1,
+          borderColor: "#F2F2F2",
+          backgroundColor: "#FFFFFF"
+    },
+touchables: {
+    flexDirection: 'row'
+},
   }
 )

@@ -20,8 +20,11 @@ export default function verificationScreen({itemData}) {
                   <Text>`Address: ${address}`</Text>
                   <Text>`Contact Number: ${contact_number}`</Text>
                   <Image source={valid_id1} style={styles.images}/>
-                  <Button onPress = {() => approve(username)} title='Approve' />
-                  <Button onPress = {() => approve(username)} title='Reject' />
+                  <View style = {{flex: 1, flexDirection: 'row'}}>
+                        <Button onPress = {() => approve(username)} title='Approve' />
+                        <Button onPress = {() => approve(username)} title='Reject' />
+                  </View>
+                  
             </View>
       )
 }
@@ -40,5 +43,6 @@ const styles = StyleSheet.create({
             alignItems: 'flex-start',
             borderColor: '#000',
             borderWidth : 1
-      }
+      },
+      
 })
