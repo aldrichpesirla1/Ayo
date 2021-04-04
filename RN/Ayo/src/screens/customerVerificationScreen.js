@@ -9,11 +9,12 @@ import VerificationScreen from '../modals/verificationScreen';
 //ug ang alignment sad diay
 
 const customerVerificationScreen = () => {
-    const navigartion = useNavigation();
+    const navigation = useNavigation();
     // contains: username, name, valid_id1 (uri), contact_number, address
     const [users, setUsers] = useState();
     const [modalVisible, setModalVisible] = useState(false); 
     const [itemData, setItemData] = useState(null);
+    
     const tmpUsers = [
         {
             name: "mmm",
@@ -67,7 +68,8 @@ const customerVerificationScreen = () => {
                                         setModalVisible(!modalVisible);
                                     }}>
                                         <Text>{item.name}</Text>
-                                        <Image source={{uri: item.valid_id1}}
+                                        <Image source={item.valid_id1}
+                                        // <Image source={{uri: item.valid_id1}}
                                             style={{width:150, height:150}}
                                         />
                                     </TouchableOpacity>
@@ -84,13 +86,13 @@ const customerVerificationScreen = () => {
                     transparent
                     visible={modalVisible}
                     onRequestClose = {() => {
-                            visible=false
+                           setModalVisible(false); 
                     }}
                 >
                 <View>
                     <View style={styles.modalContainer}>
                             <View style={styles.modalView}>
-                                <TouchableOpacity onPress = {() => setModalVisible(!modalVisible)}>
+                                <TouchableOpacity style={{margin:100}} onPress = {() => setModalVisible(!modalVisible)}>
                                         <Fontisto name="close" size={30}/>
                                 </TouchableOpacity>
                                 {/* TAN-AWA NI */}
@@ -126,20 +128,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
       },
       modal : {
-            margin: 0,
-            alignItems: "center",
-            justifyContent: "center"
+        width: '100%',
+        height: '100%',
+        margin: 0,
+        alignItems: "center",
+        justifyContent: "center"
       },
       modalContainer : {
-            flex: 1,
+          height:'100%',
             justifyContent: "center",
             alignItems: "flex-end",
             flexDirection: 'row',
       },
       modalView : {
-            flex: 1,
-            height: '50%',
-            width: 100,
+            height: '75%',
+            width: '100%',
             borderWidth: 1,
             borderColor: "#F2F2F2",
             backgroundColor: "#FFFFFF"
@@ -156,10 +159,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: 17,
+             fontSize: 17,
     letterSpacing: 1,
     marginBottom: '5%',
     alignSelf:'center'
   },
 });
-

@@ -29,7 +29,7 @@ export default function App() {
       <NavigationContainer initialRouteName= "Log In">
         <Stack.Navigator>
           {/* <Stack.Screen name ="Testing Screen" component = {testingscreen}/> */}
-          {/*<Stack.Screen options={{headerShown: false}} name="Confirm" component={confirmationScreen} />*/}
+          
           <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
           <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
@@ -37,6 +37,7 @@ export default function App() {
           <Stack.Screen options={{headerShown: false}} name="Staff Sign Up" component={pharmacyStaffSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Owner Sign Up" component={pharmacyOwnerSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Verify Customers" component={customerVerificationScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Confirm" component={confirmationScreen} />
           
           
           <Stack.Screen name="Api" component={apiTestScreen} />

@@ -51,8 +51,8 @@ const pharmacyOwnerSignUpScreen = () => {
       if (result.cancelled)
         return null;
 
-      setImage(result.uri);
-      setBusinessPermit(result.uri);
+      //setImage(result.uri);
+      //setBusinessPermit(result.uri);
     };
 
     
@@ -75,7 +75,7 @@ const pharmacyOwnerSignUpScreen = () => {
                   // usersApi.post('register', formdata, {headers : {
                   //   'Content-Type': 'multipart/form-data',
                   // }}).then(err => console.log(err))
-                  navigation.navigate("Verify Customers");
+                  navigation.navigate("Confirm");
                 }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
