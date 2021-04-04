@@ -131,7 +131,7 @@ const confirmationScreen = () => {
       // />
       <View style={styles.touchables}>
                                     <TouchableOpacity item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
-                                        //setItemData(item);
+                                        setItemData(item);
                                         setSelectedId(item.username)
                                         setModalVisible(!modalVisible);
                                     }}>
@@ -172,7 +172,7 @@ const confirmationScreen = () => {
                 <View>
                     <View style={styles.modalContainer}>
                             <View style={styles.modalView}>
-                                <TouchableOpacity style={{margin:100}} onPress = {() => setModalVisible(!modalVisible)}>
+                                <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
                                         <Fontisto name="close" size={30}/>
                                 </TouchableOpacity>
                                 {/* TAN-AWA NI */}
@@ -288,7 +288,7 @@ const styles = StyleSheet.create(
       justifyContent: "center"
     },
     modalContainer : {
-        height:'100%',
+          height:'50%',
           justifyContent: "center",
           alignItems: "flex-end",
           flexDirection: 'row',
@@ -298,7 +298,7 @@ const styles = StyleSheet.create(
           width: '100%',
           borderWidth: 1,
           borderColor: "#F2F2F2",
-          backgroundColor: "#FFFFFF"
+          //backgroundColor: "#FFFFFF"
     },
 touchables: {
     flexDirection: 'row'
