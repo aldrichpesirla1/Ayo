@@ -39,6 +39,8 @@ const pharmacyOwnerSignUpScreen = () => {
       })();
     }, []);
 
+    
+
     const pickImage = async () => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -58,7 +60,7 @@ const pharmacyOwnerSignUpScreen = () => {
     
     return (
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
             <View style={styles.ButtonContainer}>
               <View>
                 <View style = {styles.ImagePreviewContainer}>
@@ -102,7 +104,7 @@ const styles = StyleSheet.create(
       },
       ButtonContainer:{
         width: '100%',
-        height: '70%',
+        height: '65%',
         bottom: 0,
         alignSelf: 'flex-end',
         position: 'absolute',

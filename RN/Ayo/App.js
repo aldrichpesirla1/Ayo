@@ -41,7 +41,7 @@ export default function App() {
           
           
           <Stack.Screen name="Api" component={apiTestScreen} />
-          <Stack.Screen name="Homes" component={homeScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Homes" component={homeScreen} />
           <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />
           <Stack.Screen name="MedItems" component={medItemScreen} />
         </Stack.Navigator>      

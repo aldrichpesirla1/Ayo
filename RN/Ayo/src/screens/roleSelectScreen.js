@@ -45,7 +45,7 @@ const roleSelectScreen = () => {
 
     return (
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
             <View style={styles.ContentContainer}>
               <Text style={styles.Title}>SELECT USER TYPE</Text>
               <View style = {styles.ButtonContainer}>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create(
       },
       ContentContainer:{
         width: '100%',
-        height: '70%',
+        height: '65%',
         bottom: 0,
         alignSelf: 'flex-end',
         position: 'absolute',
