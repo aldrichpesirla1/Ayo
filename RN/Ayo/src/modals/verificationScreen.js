@@ -15,14 +15,14 @@ export default function verificationScreen({itemData}) {
       }
 
       return (
-            <View>
+            <View style = {styles.UsernameField}>
                   <Text>`Name: ${name}`</Text>
                   <Text>`Address: ${address}`</Text>
                   <Text>`Contact Number: ${contact_number}`</Text>
                   <Image source={valid_id1} style={styles.images}/>
                   <View style = {{flex: 1, flexDirection: 'row'}}>
-                        <Button onPress = {() => approve(username)} title='Approve' />
-                        <Button onPress = {() => approve(username)} title='Reject' />
+                        <Button  onPress = {() => approve(username)} title='Approve' />
+                        <Button  onPress = {() => approve(username)} title='Reject' />
                   </View>
                   
             </View>
@@ -44,5 +44,20 @@ const styles = StyleSheet.create({
             borderColor: '#000',
             borderWidth : 1
       },
+      UsernameField: {
+            width: '70%',
+            padding: '3%',
+            borderRadius: 15,
+            borderColor: '#ffffff',
+            backgroundColor: '#ffffff',
+            textAlign: 'center',
+            fontFamily: 'Roboto',
+            fontWeight: 'bold',
+            fontSize: 17,
+            letterSpacing: 1,
+            marginBottom: '5%',
+            alignSelf:'center',
+            position: 'absolute'
+          },
       
 })
