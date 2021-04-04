@@ -61,7 +61,7 @@ const SignUpScreen = () => {
     */ 
       return (
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
             <View style={styles.ContentContainer}> 
               <Modal animationType="none"
                       transparent={true}

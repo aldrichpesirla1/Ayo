@@ -106,7 +106,7 @@ const styles = StyleSheet.create(
         justifyContent: 'center',
       },
       Button: {
-        backgroundColor: '#00d1a3',
+        backgroundColor: '#ffffff',
         width: '90%',
         alignSelf:'center',
         alignItems:'center',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create(
         textShadowColor: 'grey'
       },
       ButtonText: {
-        color: '#ffffff',
+        color: '#00d1a3',
         fontSize: 20,
         letterSpacing: 1,
         fontFamily: 'Roboto',
