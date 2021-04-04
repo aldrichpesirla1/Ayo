@@ -46,9 +46,9 @@ const roleSelectScreen = () => {
     return (
         <SafeAreaView style= {styles.Container}>
           <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
-            <View style={styles.ButtonContainer}>
-              <View>
-                <Text style={styles.Text}>USER TYPE</Text>
+            <View style={styles.ContentContainer}>
+              <Text style={styles.Title}>SELECT USER TYPE</Text>
+              <View style = {styles.ButtonContainer}>
                 <TouchableOpacity style = {styles.Button} onPress = {() => {
                   setRole("Customer");
                   navigation.navigate("Customer Sign Up")
@@ -88,7 +88,7 @@ const styles = StyleSheet.create(
         position: 'relative',
         resizeMode: 'cover'
       },
-      ButtonContainer:{
+      ContentContainer:{
         width: '100%',
         height: '70%',
         bottom: 0,
@@ -96,23 +96,35 @@ const styles = StyleSheet.create(
         position: 'absolute',
         justifyContent: 'center',
       },
+      ButtonContainer:{
+        width: '80%',
+        height: 'auto',
+        borderWidth: 4,
+        borderRadius: 15,
+        borderColor: '#ffffff',
+        alignSelf: 'center',
+        justifyContent: 'center',
+      },
       Button: {
         backgroundColor: '#00d1a3',
-        width: '70%',
+        width: '90%',
         alignSelf:'center',
         alignItems:'center',
-        marginTop: '7%',
+        margin: '5%',
         borderRadius: 15,
         padding: '3%',
         elevation: 3
       },
-      Text:{
+      Title:{
         color: '#ffffff',
-        fontSize: 40,
-        letterSpacing: 1,
+        fontSize: 30,
         fontFamily: 'Roboto',
         fontWeight: 'bold',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginBottom: '2%',
+        textShadowRadius: 5,
+        textShadowOffset: {width: 0, height: 2},
+        textShadowColor: 'grey'
       },
       ButtonText: {
         color: '#ffffff',
