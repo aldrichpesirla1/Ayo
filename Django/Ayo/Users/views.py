@@ -9,15 +9,17 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import exceptions
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from PIL import Image
 from io import BytesIO
 from urllib.request import urlretrieve
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
-from .serializers import PharmacyWorkerSerializer, UserSerializer, OwnerSerializer, CustomerSerializer, CustomerViewSerializer
+from .serializers import PharmacyWorkerSerializer, UserSerializer, OwnerSerializer, CustomerSerializer, CustomerViewSerializer, PharmacyWorkerViewSerializer, OwnerViewSerializer
 from .models import User, PharmacyWorker, Customer
-from .authentication import generate_access_token
+from .authentication import generate_access_token, JWTAuthentication
 
 
 # Create your views here.
@@ -87,6 +89,25 @@ def login(request):
     }
     return response
 
+class AuthenticatedOwner(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = None
+        if isinstance(request.user, Customer):
+            val = Customer.objects.filter(id=request.user.id).values()[0]
+            serializer = CustomerViewSerializer(val, context={'request' : request})
+        elif isinstance(request.user, Owner):
+            val = PharmacyWorker.objects.filter(id=request.user.id).values()[0]
+            serializer = PharmacyWorkerViewSerializer(val, context={'request' : request})
+        elif isinstance(request.user, PharmacyWorker):
+            val = Owner.objects.filter(id=request.user.id).values()[0]
+            serializer = OwnerViewSerializer(request.user, context={'request' : request})
+
+        return Response({
+            'data': serializer.data
+        })
 
 @ api_view(['GET'])
 def users(request):

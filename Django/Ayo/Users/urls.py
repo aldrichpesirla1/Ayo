@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import users, register, login, unverifiedcustomers, approve_customer, reject_customer
+from .views import users, register, login, unverifiedcustomers, approve_customer, reject_customer, AuthenticatedOwner
 
 urlpatterns = [
       path('users', users),
@@ -9,4 +9,5 @@ urlpatterns = [
       path('unverifiedcustomers', unverifiedcustomers),
       path('approve', approve_customer),
       path('reject', reject_customer),
+      path('user', AuthenticatedOwner.as_view())
 ]
