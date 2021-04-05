@@ -39,6 +39,12 @@ class CustomerSerializer(UserSerializer):
         fields = ['name', 'contact_number', 'username',
                   'address', 'password', 'valid_id1']
 
+class OwnerSerializer(UserSerializer):
+    class Meta:
+        model = Owner 
+        fields = ['name', 'contact_number', 'username',
+                  'address', 'password', 'business_permit']
+
 class CustomerViewSerializer(UserSerializer):
     valid_id1= serializers.SerializerMethodField('get_valid_id1_url')
     
@@ -49,9 +55,27 @@ class CustomerViewSerializer(UserSerializer):
     class Meta:
         model = Customer 
         fields = ['name', 'contact_number', 'username',
-                  'address', 'password', 'valid_id1']
+                  'address', 'valid_id1']
 
-class OwnerSerializer(UserSerializer):
+class PharmacyWorkerViewSerializer(UserSerializer):
+    medical_license = serializers.SerializerMethodField('get_valid_id1_url')
+    
+    def get_valid_id1_url(self, obj):
+        preurl = settings.MEDIA_URL + obj['valid_id1']
+        return self.context['request'].build_absolute_uri(preurl)
+
+    class Meta:
+        model = PharmacyWorker 
+        fields = ['name', 'contact_number', 'username',
+                  'address', 'password', 'medical_license']
+
+class OwnerViewSerializer(UserSerializer):
+    business_permit = serializers.SerializerMethodField('get_valid_id1_url')
+    
+    def get_valid_id1_url(self, obj):
+        preurl = settings.MEDIA_URL + obj['valid_id1']
+        return self.context['request'].build_absolute_uri(preurl)
+
     class Meta:
         model = Owner 
         fields = ['name', 'contact_number', 'username',
