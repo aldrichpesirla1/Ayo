@@ -69,11 +69,11 @@ def register(request):
 
 @ api_view(['POST'])
 def login(request):
-    number = request.data.get('contact_number')
+    username = request.data.get('username')
     password = request.data.get('password')
 
     # used filter as to check if user exists
-    user = User.objects.filter(contact_number=number).first()
+    user = User.objects.filter(username=username).first()
 
     if user is None:
         raise exceptions.AuthenticationFailed("User not found")
@@ -94,6 +94,7 @@ class AuthenticatedOwner(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        print(request)
         serializer = None
         if isinstance(request.user, Customer):
             val = Customer.objects.filter(id=request.user.id).values()[0]

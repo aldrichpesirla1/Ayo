@@ -73,7 +73,7 @@ const pharmacyOwnerSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD PERMIT</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
-                  // const formdata = json2formdata(JSON.stringify(finalval));
+                  const formdata = json2formdata(JSON.stringify(finalval));
                   // usersApi.post('register', formdata, {headers : {
                   //   'Content-Type': 'multipart/form-data',
                   // }}).then(err => console.log(err))
