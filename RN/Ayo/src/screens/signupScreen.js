@@ -5,7 +5,8 @@ import {StyleSheet,
         TextInput,
         TouchableOpacity,
         ImageBackground, 
-        SafeAreaView} from 'react-native';
+        SafeAreaView,
+        Modal} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -47,6 +48,9 @@ const SignUpScreen = () => {
     // const [addressInput, recordAddressInput] = useState('');
     const navigation = useNavigation();
 
+    const [firstStep, setFirstStepVisible] = useState(true);
+    const [secondStep, setSecondStepVisible] = useState(false);
+
     /* TODO: 
         - INTEGRATE RED BORDER PARA SA: 
           = LACKING ENTRIES ONPRESS SA REGISTER
@@ -56,69 +60,104 @@ const SignUpScreen = () => {
         - CONNECT TO BACKEND API (AXIOS.POST)
     */ 
       return (
-    // NOTE: THIS COULD BE IMPLEMENTED VIA A FLATLIST SINCE GAMAY RAMAN UG DIFFERENCE ANG TEXTINPUTS
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
-            <View style={styles.FieldContainer}>
-              <View>
-                <TextInput 
-                    placeholder = "Full name"
-                    placeholderTextColor = '#dcdcdc'
-                    underlineColorAndroid = "transparent"
-                    onChangeText = {(nameInput) => setName(nameInput)}
-                    style = {styles.UsernameField}/>
-              </View>
-              <View>
-                <TextInput 
-                    placeholder = "Username"
-                    placeholderTextColor = '#dcdcdc'
-                    underlineColorAndroid = "transparent"
-                    onChangeText = {(usernameInput) => setUsername(usernameInput)}
-                    style = {styles.UsernameField}/>
-              </View>
-              <View>
-                <TextInput 
-                    placeholder = "Password"
-                    placeholderTextColor = '#dcdcdc'
-                    underlineColorAndroid = "transparent"
-                    secureTextEntry
-                    onChangeText = {(passwordInput) => setPassword(passwordInput)}
-                    style = {styles.OtherFields}/>
-              </View>
-              <View>
-                <TextInput 
-                    placeholder = "Confirm Password"
-                    placeholderTextColor = '#dcdcdc'
-                    underlineColorAndroid = "transparent"
-                    secureTextEntry
-                    onChangeText = {(passwordInput) => setPasswordConfirm(passwordInput)}
-                    style = {styles.OtherFields}/>
-              </View>
-              <View>
-                <TextInput 
-                    placeholder = "Contact Number"
-                    placeholderTextColor = '#dcdcdc'
-                    defaultValue = "09"
-                    underlineColorAndroid = "transparent"
-                    onChangeText = {(contactNumberInput) => setContactNumber(contactNumberInput)}
-                    style = {styles.OtherFields}/>
-              </View>
-              <View>
-                <TextInput 
-                    placeholder = "Address"
-                    placeholderTextColor = '#dcdcdc'
-                    underlineColorAndroid = "transparent"
-                    onChangeText = {(addressInput) => setAddress(addressInput)}
-                    style = {styles.OtherFields}/>
-              </View>
-              <View>
-                <TouchableOpacity style = {styles.NextButton} onPress = {() => {
-                  console.log("Signup data is: ", signupData);                  
-                  navigation.navigate("Select Role")
-                }}>
-                  <Text style = {styles.ButtonText}>NEXT</Text>
-                </TouchableOpacity>
-              </View>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
+            <View style={styles.ContentContainer}> 
+              <Modal animationType="none"
+                      transparent={true}
+                      visible={firstStep}
+                      onRequestClose={() => {
+                        setFirstStepVisible(!firstStep);
+                        navigation.navigate("Log In")}}
+              >
+                <View style = {styles.ContentContainer}>
+                  <View>
+                    <TextInput 
+                        placeholder = "Username"
+                        placeholderTextColor = '#dcdcdc'
+                        underlineColorAndroid = "transparent"
+                        onChangeText = {(usernameInput) => setUsername(usernameInput)}
+                        style = {styles.UsernameField}/>
+                  </View>
+                  <View>
+                    <TextInput 
+                        placeholder = "Password"
+                        placeholderTextColor = '#dcdcdc'
+                        underlineColorAndroid = "transparent"
+                        secureTextEntry
+                        onChangeText = {(passwordInput) => setPassword(passwordInput)}
+                        style = {styles.OtherFields}/>
+                  </View>
+                  <View>
+                    <TextInput 
+                        placeholder = "Confirm Password"
+                        placeholderTextColor = '#dcdcdc'
+                        underlineColorAndroid = "transparent"
+                        secureTextEntry
+                        onChangeText = {(passwordInput) => setPasswordConfirm(passwordInput)}
+                        style = {styles.OtherFields}/>
+                  </View>
+                  <View>
+                    <TouchableOpacity style = {styles.NextButton} onPress = {() => {
+                      setFirstStepVisible(!firstStep);
+                      setSecondStepVisible(!secondStep);
+                    }}>
+                      <Text style = {styles.ButtonText}>NEXT</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
+              <Modal animationType="none"
+                      transparent={true}
+                      visible={secondStep}
+                      onRequestClose={() => {
+                        setFirstStepVisible(!firstStep);
+                        setSecondStepVisible(!secondStep)}}
+              >
+                <View style={styles.ContentContainer}>
+                  <View>
+                    <TextInput 
+                        placeholder = "Full name"
+                        placeholderTextColor = '#dcdcdc'
+                        underlineColorAndroid = "transparent"
+                        onChangeText = {(nameInput) => setName(nameInput)}
+                        style = {styles.UsernameField}/>
+                  </View>
+                  <View>
+                    <TextInput 
+                        placeholder = "Contact Number"
+                        placeholderTextColor = '#dcdcdc'
+                        underlineColorAndroid = "transparent"
+                        onChangeText = {(contactNumberInput) => setContactNumber(contactNumberInput)}
+                        style = {styles.OtherFields}/>
+                  </View>
+                  <View>
+                    <TextInput 
+                        placeholder = "Address"
+                        placeholderTextColor = '#dcdcdc'
+                        underlineColorAndroid = "transparent"
+                        onChangeText = {(addressInput) => setAddress(addressInput)}
+                        style = {styles.OtherFields}/>
+                  </View>
+                  <View>
+                    <TouchableOpacity style = {styles.NextButton} onPress = {() => {
+                      setFirstStepVisible(!firstStep)
+                      setSecondStepVisible(!secondStep)
+                    }}>
+                      <Text style = {styles.ButtonText}>BACK</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View>
+                    <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
+                      setSecondStepVisible(!secondStep);
+                      console.log("Signup data is: ", signupData);                  
+                      navigation.navigate("Select Role")
+                    }}>
+                      <Text style = {styles.ButtonText}>SIGN UP</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
             </View>
         </SafeAreaView>
     );
@@ -139,13 +178,13 @@ const styles = StyleSheet.create(
         position: 'relative',
         resizeMode: 'cover'
       },
-      FieldContainer:{
+      ContentContainer:{
         width: '100%',
-        height: '70%',
+        height: '65%',
         bottom: 0,
         alignSelf: 'flex-end',
         position: 'absolute',
-        justifyContent: 'center',
+        justifyContent: 'center'
       },
       UsernameField: {
         width: '70%',
@@ -173,9 +212,19 @@ const styles = StyleSheet.create(
         fontWeight: 'bold',
         fontSize: 17,
         letterSpacing: 1,
-        margin: "2.5%",
+        margin: "2%",
         marginBottom: '5%',
         alignSelf:'center'
+      },
+      SignupButton: {
+        backgroundColor: '#00d1a3',
+        width: '70%',
+        alignSelf:'center',
+        alignItems:'center',
+        marginBottom: '10%',
+        borderRadius: 15,
+        padding: '1%',
+        elevation: 3
       },
       NextButton: {
         borderWidth: 2,
@@ -184,8 +233,7 @@ const styles = StyleSheet.create(
         width: '70%',
         alignSelf:'center',
         alignItems:'center',
-        marginTop: '7%',
-        marginBottom: '10%',
+        margin: '7%',
         borderRadius: 15,
         padding: '1%'
       },

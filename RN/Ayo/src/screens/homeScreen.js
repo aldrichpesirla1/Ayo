@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet} from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, SafeAreaView} from 'react-native'
 import {useSelector} from 'react-redux';
 
 import {HomeScreenButtons} from '../components/index';
@@ -12,23 +12,42 @@ export default function homeScreen({navigation}) {
       console.log("Final signup vals ", signupval);
 
       return (
-            <View>
-                  <HomeScreenButtons buttonVals={[
-                        {title: "View Medicine Items", img:icons.homeScreenButton1, screen:"ViewMedItems"},
-                        {title: "Screen2", img:icons.homeScreenButton1 },
-                        {title: "Screen3", img:icons.homeScreenButton1 }
-                  ]}/>
-                  <HomeScreenButtons buttonVals={[
-                        {title: "Screen4", img:icons.homeScreenButton1},
-                        {title: "Screen5", img:icons.homeScreenButton1 },
-                        {title: "Screen6", img:icons.homeScreenButton1 }
-                  ]}/>
-                  <HomeScreenButtons buttonVals={[
-                        {title: "Screen7", img:icons.homeScreenButton1},
-                        {title: "Screen8", img:icons.homeScreenButton1 },
-                        {title: "Screen9", img:icons.homeScreenButton1 }
-                  ]}/>
-            </View>
+            <SafeAreaView style = {styles.Container}>
+                  <ImageBackground source={require('../backgrounds/AyoDefaultBG.png')} style={styles.Background}/>
+                  <View style = {{position: 'absolute'}}>
+                        <HomeScreenButtons buttonVals={[
+                              {title: "View Medicine Items", img:icons.homeScreenButton1, screen:"ViewMedItems"},
+                              {title: "Screen2", img:icons.homeScreenButton1 },
+                              {title: "Screen3", img:icons.homeScreenButton1 }
+                        ]}/>
+                        <HomeScreenButtons buttonVals={[
+                              {title: "Screen4", img:icons.homeScreenButton1},
+                              {title: "Screen5", img:icons.homeScreenButton1 },
+                              {title: "Screen6", img:icons.homeScreenButton1 }
+                        ]}/>
+                        <HomeScreenButtons buttonVals={[
+                              {title: "Screen7", img:icons.homeScreenButton1},
+                              {title: "Screen8", img:icons.homeScreenButton1 },
+                              {title: "Screen9", img:icons.homeScreenButton1 }
+                        ]}/>
+                  </View>
+            </SafeAreaView>
       )
 }
+
+const styles = StyleSheet.create(
+      {
+        Container: {
+          flex: 1
+        },
+        Background: {
+          width: '100%',
+          height: '100%',
+          alignSelf: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          resizeMode: 'cover'
+        },
+      }
+)
 

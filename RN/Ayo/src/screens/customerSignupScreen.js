@@ -14,9 +14,11 @@ import {StyleSheet,
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import {useSelector, useDispatch} from 'react-redux';
+import json2formdata from 'json2formdata';
 
 import {getSelectSignup, getValidId} from '../redux/signupScreen/selectors';
 import {setValidId} from '../redux/signupScreen/actions';
+import usersApi from '../api/Users';
 
 const actionDispatch = (dispatch) => ({
   setValidId: (valid_id1) => dispatch(setValidId(valid_id1)),
@@ -28,7 +30,7 @@ const customerSignUpScreen = () => {
     const [image, setImage] = useState(null);
     const finalval = useSelector(getSelectSignup);
     const valid_id1 = useSelector(getValidId);
-
+  
     useEffect(() => {
       (async () => {
         if (Platform.OS !== 'web') {
@@ -49,19 +51,19 @@ const customerSignUpScreen = () => {
 
       console.log(result); //Details of the uploaded image
 
-      if(result.cancelled)
+      if (result.cancelled)
         return null;
 
+      setImage(result.uri); //Do not remove this as this is to display the image
       setValidId(result.uri);
     };
 
     return (
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
             <View style={styles.ButtonContainer}>
               <View>
                 <View style = {styles.ImagePreviewContainer}>
-                  {/* todo 1 */}
                   {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
                   <Text style = {styles.PlaceholderText}>
                     ID Photo
@@ -71,11 +73,16 @@ const customerSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD ID</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
-                  console.log("sa dili pa mubalhin ", finalval);
-                  navigation.navigate("Homes")}
+                  const formdata = json2formdata(JSON.stringify(finalval))
+                  console.log("before ", formdata);
+                  usersApi.post('register', formdata, {headers : {
+                    'Content-Type': 'multipart/form-data',
+                  }}).then(err => console.log(err))
+                  navigation.navigate("Homes");
+                  }
                 }>
-              <Text style = {styles.ButtonText}>SIGN UP</Text>
-            </TouchableOpacity>
+                  <Text style = {styles.ButtonText}>SIGN UP</Text>
+                </TouchableOpacity>
               </View>
             </View>
         </SafeAreaView>
@@ -99,7 +106,7 @@ const styles = StyleSheet.create(
       },
       ButtonContainer:{
         width: '100%',
-        height: '70%',
+        height: '65%',
         bottom: 0,
         alignSelf: 'flex-end',
         position: 'absolute',

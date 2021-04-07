@@ -1,6 +1,7 @@
 """
 TODO:
 Recheck if needed valid ids per user
+- update django roles
 - if there are special roles for pharmacist
 """
 
@@ -11,7 +12,6 @@ import uuid
 # nullable for now
 
 # AbstractUser so that we can use Django Authorization functions
-
 
 class User(AbstractUser):
     id = models.UUIDField(
@@ -50,12 +50,20 @@ class Customer(User):
     medical_record = models.FileField(
         upload_to='customer_medical_records', null=True, blank=True)
     is_verified = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Customer"
 
+    def approve(self):
+        self.is_verified = True
+        self.save()
+
+    def reject(self):
+        self.is_rejected = True
+        self.save()
+
     def save(self, *args, **kwargs):
-        print(*args)
         self.role = "Customer"
         super(Customer, self).save(*args, **kwargs)
 

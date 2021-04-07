@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState , useEffect} from 'react';
 import {StyleSheet, 
         Text, 
         View,
         TouchableOpacity,
         ImageBackground, 
-        SafeAreaView} from 'react-native';
+        SafeAreaView,
+        BackHandler,
+        Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -19,12 +21,34 @@ const roleSelectScreen = () => {
     const {setRole} = actionDispatch(useDispatch());
     const navigation = useNavigation();
 
+    useEffect(() => {
+      const backAction = () => {
+        Alert.alert("Warning", "Go back the Log In screen? You will lose all your Sign Up information.", [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel"
+          },
+          { text: "YES", onPress: () => navigation.navigate("Log In") }
+        ]);
+        return true;
+      };
+  
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+  
+      return () => backHandler.remove();
+    }, []);
+  
+
     return (
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
-            <View style={styles.ButtonContainer}>
-              <View>
-                <Text style={styles.Text}>USER TYPE</Text>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
+            <View style={styles.ContentContainer}>
+              <Text style={styles.Title}>SELECT USER TYPE</Text>
+              <View style = {styles.ButtonContainer}>
                 <TouchableOpacity style = {styles.Button} onPress = {() => {
                   setRole("Customer");
                   navigation.navigate("Customer Sign Up")
@@ -64,34 +88,46 @@ const styles = StyleSheet.create(
         position: 'relative',
         resizeMode: 'cover'
       },
-      ButtonContainer:{
+      ContentContainer:{
         width: '100%',
-        height: '70%',
+        height: '65%',
         bottom: 0,
         alignSelf: 'flex-end',
         position: 'absolute',
         justifyContent: 'center',
       },
+      ButtonContainer:{
+        width: '80%',
+        height: 'auto',
+        borderWidth: 4,
+        borderRadius: 15,
+        borderColor: '#ffffff',
+        alignSelf: 'center',
+        justifyContent: 'center',
+      },
       Button: {
-        backgroundColor: '#00d1a3',
-        width: '70%',
+        backgroundColor: '#ffffff',
+        width: '90%',
         alignSelf:'center',
         alignItems:'center',
-        marginTop: '7%',
+        margin: '5%',
         borderRadius: 15,
         padding: '3%',
         elevation: 3
       },
-      Text:{
+      Title:{
         color: '#ffffff',
-        fontSize: 40,
-        letterSpacing: 1,
+        fontSize: 30,
         fontFamily: 'Roboto',
         fontWeight: 'bold',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginBottom: '2%',
+        textShadowRadius: 5,
+        textShadowOffset: {width: 0, height: 2},
+        textShadowColor: 'grey'
       },
       ButtonText: {
-        color: '#ffffff',
+        color: '#00d1a3',
         fontSize: 20,
         letterSpacing: 1,
         fontFamily: 'Roboto',

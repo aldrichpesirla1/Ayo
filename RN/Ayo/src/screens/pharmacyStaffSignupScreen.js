@@ -55,19 +55,13 @@ const pharmacyStaffSignUpScreen = () => {
         return null;
 
       setImage(result.uri);
-      let localUri = result.uri;
-      let filename = localUri.split('/').pop();
-      // Infer the type of the image
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`; 
-      
       setMedicalLicense(result.uri);
       // setMedicalLicense({ uri: localUri, name: filename, type });
     };
 
     return (
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
             <View style={styles.ButtonContainer}>
               <View>
                 <View style = {styles.ImagePreviewContainer}>
@@ -80,9 +74,8 @@ const pharmacyStaffSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD MED LICENSE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
-                  const kani = json2formdata(JSON.stringify(finalval))
-                  console.log("sa dili pa mulahos ", finalval);
-                  usersApi.post('register', kani, {headers : {
+                  const formdata = json2formdata(JSON.stringify(finalval))
+                  usersApi.post('register', formdata, {headers : {
                     'Content-Type': 'multipart/form-data',
                   }}).then(err => console.log(err))
                   navigation.navigate("Homes");
@@ -112,7 +105,7 @@ const styles = StyleSheet.create(
       },
       ButtonContainer:{
         width: '100%',
-        height: '70%',
+        height: '65%',
         bottom: 0,
         alignSelf: 'flex-end',
         position: 'absolute',
