@@ -26,6 +26,7 @@ def generate_access_token(user):
 
 class JWTAuthentication(BaseAuthentication):
       def authenticate(self, request):
+            print(request.data)
             token = request.COOKIES.get('jwt')
 
             if not token:
