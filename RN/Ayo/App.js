@@ -20,6 +20,8 @@ import {apiTestScreen,
         customerVerificationScreen} from './src/screens/index';
 import store from './src/store';
 
+import VerifiedModal from './src/modals/VerifiedModal'
+
 
 const Stack = createStackNavigator();
 
@@ -38,7 +40,8 @@ export default function App() {
           <Stack.Screen options={{headerShown: false}} name="Owner Sign Up" component={pharmacyOwnerSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Verify Customers" component={customerVerificationScreen} />
           <Stack.Screen options={{headerShown: false}} name="Confirm" component={confirmationScreen} />
-          
+
+          <Stack.Screen options={{headerShown: false}} name="Verify" component={VerifiedModal} />
           
           <Stack.Screen name="Api" component={apiTestScreen} />
           <Stack.Screen options={{headerShown: false}} name="Homes" component={homeScreen} />

@@ -16,6 +16,10 @@ import {getUsername, getPassword} from '../redux/loginScreen/selectors';
 import {setUsername, setPassword} from '../redux/loginScreen/actions' 
 import usersApi from '../api/Users';
 
+import RejectModal from '../modals/RejectModal';
+import WaitingModal from '../modals/WaitingModal';
+import VerifiedModal from '../modals/VerifiedModal'; 
+
 const actionDispatch = (dispatch) => ({
   setUsername: (username) => dispatch(setUsername(username)),
   setPassword: (password) => dispatch(setPassword(password)),
@@ -33,11 +37,12 @@ const getLoginData = () => {
 
 const LogInScreen = () => {
   const {setUsername, setPassword}  = actionDispatch(useDispatch());
-  // const {loginData} = useSelector(stateSelector);
   const {username, password} = getLoginData(); 
-  // const [usernameInput, recordUsernameInput] = useState('');//usernameInput is the variable which contains the username
-  // const [passwordInput, recordPasswordInput] = useState('');//same applies to password
   const navigation = useNavigation();
+  const [verifyVisible, setverifyVisible] = useState(false);
+  const [rejectVisible, setRejectVisible] = useState(false);
+  const [waitingVisible, setWaitingVisible] = useState(false);
+  const [userData, setUserData] = useState(); //temporary
 
   const login = async (formdata) => {
     const response = await usersApi.post('login', formdata, {headers : {
@@ -52,13 +57,38 @@ const LogInScreen = () => {
       const payload = {
       }
     const secondresponse = await usersApi.get('user', payload, header);
-    return (secondresponse);
+    setUserData(secondresponse.data.data)
+
+    console.log(secondresponse);
+    // SUUUUUPER EXPLICIT
+    if(secondresponse.data.data['is_verified']){
+      toggleVerify();
+      setWaitingVisible(false);
+      setRejectVisible(false);
+    }
+    else if(secondresponse.data.data['is_rejected']){
+      toggleRejected();
+      setWaitingVisible(false);
+      setVerifyVisible(false);
+    }
+    else{
+      toggleWaiting();
+      setVerifyVisible(false);
+      setRejectVisible(false);
+    }
   }
+
+  const toggleVerify = () => {setverifyVisible(!verifyVisible)};
+  const toggleRejected = () => {setRejectVisible(!rejectVisible)};
+  const toggleWaiting = () => {setWaitingVisible(!waitingVisible)};
 
   return (
     <SafeAreaView style= {styles.Container}>
       <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
         <View style={styles.FieldContainer}>
+          <RejectModal toVisible={rejectVisible} toggle={toggleRejected}/>
+          <WaitingModal toVisible={waitingVisible} toggle={toggleWaiting}/>
+          <VerifiedModal toVisible={verifyVisible} toggle={toggleVerify}/>
           <View>
             <TextInput 
                 placeholder = "Username"
@@ -82,7 +112,6 @@ const LogInScreen = () => {
               formdata.append('username', username); 
               formdata.append('password', password); 
               login(formdata);
-              navigation.navigate("Homes")
             }}>
               <Text style = {styles.ButtonText}>LOG IN</Text>
             </TouchableOpacity>

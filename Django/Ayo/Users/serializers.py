@@ -55,7 +55,7 @@ class CustomerViewSerializer(UserSerializer):
     class Meta:
         model = Customer 
         fields = ['name', 'contact_number', 'username',
-                  'address', 'valid_id1']
+                  'address', 'valid_id1', 'is_verified', 'is_rejected']
 
 class PharmacyWorkerViewSerializer(UserSerializer):
     medical_license = serializers.SerializerMethodField('get_valid_id1_url')
