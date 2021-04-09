@@ -16,6 +16,7 @@ from io import BytesIO
 from urllib.request import urlretrieve
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+from django.db.models import Q
 
 from .serializers import PharmacyWorkerSerializer, UserSerializer, OwnerSerializer, CustomerSerializer, CustomerViewSerializer, PharmacyWorkerViewSerializer, OwnerViewSerializer
 from .models import User, PharmacyWorker, Customer
@@ -66,6 +67,41 @@ def register(request):
 
     return Response(serializer.data)
 
+# TODO: add a password checking in frontend  (new_passowrd in frontend)
+
+
+class ChangedUser(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = User.objects.filter(
+            username=request.data.get('username')).first()
+        finaldata = request.data.copy()
+
+        if user is None:
+            raise exceptions.AuthenticationFailed("User not found")
+
+        if "new_password" in finaldata.keys() and user.password != finaldata['password']:
+            raise exceptions.AuthenticationFailed("Incorrect password")
+
+        if "name" not in finaldata.keys():
+            finaldata['name'] = user.name
+        if "address" not in finaldata.keys():
+            finaldata['address'] = user.address
+        if "contact_number" not in finaldata.keys():
+            finaldata['contact_number'] = user.contact_number
+        if "new_password" in finaldata.keys():
+            finaldata['password'] = finaldata['new_password']
+
+        serializer = UserSerializer(data=finaldata, instance=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            'data': serializer.data
+        })
+
 
 @ api_view(['POST'])
 def login(request):
@@ -89,6 +125,7 @@ def login(request):
     }
     return response
 
+
 class AuthenticatedOwner(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -98,17 +135,21 @@ class AuthenticatedOwner(APIView):
         serializer = None
         if isinstance(request.user, Customer):
             val = Customer.objects.filter(id=request.user.id).values()[0]
-            serializer = CustomerViewSerializer(val, context={'request' : request})
+            serializer = CustomerViewSerializer(
+                val, context={'request': request})
         elif isinstance(request.user, Owner):
             val = PharmacyWorker.objects.filter(id=request.user.id).values()[0]
-            serializer = PharmacyWorkerViewSerializer(val, context={'request' : request})
+            serializer = PharmacyWorkerViewSerializer(
+                val, context={'request': request})
         elif isinstance(request.user, PharmacyWorker):
             val = Owner.objects.filter(id=request.user.id).values()[0]
-            serializer = OwnerViewSerializer(request.user, context={'request' : request})
+            serializer = OwnerViewSerializer(
+                request.user, context={'request': request})
 
         return Response({
             'data': serializer.data
         })
+
 
 @ api_view(['GET'])
 def users(request):
@@ -116,20 +157,25 @@ def users(request):
     serializer = UserSerializer(User.objects.all(), many=True)
     return Response(serializer.data)
 
+
 @ api_view(['GET'])
 def unverifiedcustomers(request):
-    unverified = Customer.objects.filter(is_verified=False).values();
-    serializer = CustomerViewSerializer(unverified, many=True, context={'request': request})
+    unverified = Customer.objects.filter(
+        Q(is_verified=False) & Q(is_rejected=False)).values()
+    serializer = CustomerViewSerializer(
+        unverified, many=True, context={'request': request})
     return Response(serializer.data)
+
 
 @ api_view(['PATCH'])
 def approve_customer(request):
-    customer = Customer.objects.get(username=request.data['username']);
+    customer = Customer.objects.get(username=request.data['username'])
     customer.approve()
     return Response("Successful")
 
+
 @ api_view(['PATCH'])
 def reject_customer(request):
-    customer = Customer.objects.get(username=request.data['username']);
+    customer = Customer.objects.get(username=request.data['username'])
     customer.reject()
     return Response("Successful")

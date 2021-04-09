@@ -1,19 +1,20 @@
 import React, { Component, useState } from 'react';
 import { Modal, Text, ImageBackground, TouchableOpacity, View, Alert,StyleSheet } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-export default function App() {
-  const [modalVisible, setModalVisible] = useState(true);
+export default function App({toVisible, toggle}) {
+  const navigation = useNavigation();
 
   const modalHeader=(
     <View style={styles.modalHeader}>
-      <Text style={styles.title}>Waiting</Text>
+      <Text style={styles.title}>Approved</Text>
       <View style={styles.divider}></View>
     </View>
   )
 
   const modalBody=(
     <View style={styles.modalBody}>
-      <Text style={styles.bodyText}>Processing registration...</Text>
+      <Text style={styles.bodyText}>Proceed to User Dashboard?</Text>
     </View>
   )
 
@@ -23,7 +24,8 @@ export default function App() {
       <View style={{flexDirection:"row-reverse",margin:10}}>
         <TouchableOpacity style={{...styles.actions,backgroundColor:"dodgerblue"}} 
           onPress={() => {
-            setModalVisible(!modalVisible);
+            Alert.alert(toggle())
+            navigation.navigate("Homes")
           }}>
           <Text style={styles.actionText}>Ok</Text>
         </TouchableOpacity>
@@ -42,11 +44,10 @@ export default function App() {
   const modal = (
     <Modal
     animationType="slide"
-      transparent={false}
-      visible={modalVisible}
+      transparent={true}
+      visible={toVisible}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
-        setModalVisible(!modalVisible);
       }}>
       <View style={styles.modal}>
         <View>
@@ -58,13 +59,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      
       {modal}
-     <ImageBackground 
-      source={require("./assets/AyoLandingPage.png")}
-      style = {styles.image}
-      />
-      <Text style={styles.text}>Registration Status</Text>
     </View>
   );
 }
