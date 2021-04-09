@@ -39,7 +39,7 @@ const LogInScreen = () => {
   const {setUsername, setPassword}  = actionDispatch(useDispatch());
   const {username, password} = getLoginData(); 
   const navigation = useNavigation();
-  const [verifyVisible, setverifyVisible] = useState(false);
+  const [verifyVisible, setVerifyVisible] = useState(false);
   const [rejectVisible, setRejectVisible] = useState(false);
   const [waitingVisible, setWaitingVisible] = useState(false);
   const [userData, setUserData] = useState(); //temporary
@@ -78,7 +78,7 @@ const LogInScreen = () => {
     }
   }
 
-  const toggleVerify = () => {setverifyVisible(!verifyVisible)};
+  const toggleVerify = () => {setVerifyVisible(!verifyVisible)};
   const toggleRejected = () => {setRejectVisible(!rejectVisible)};
   const toggleWaiting = () => {setWaitingVisible(!waitingVisible)};
 

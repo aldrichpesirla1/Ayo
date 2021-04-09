@@ -44,7 +44,7 @@ export default function App({toVisible, toggle}) {
   const modal = (
     <Modal
     animationType="slide"
-      transparent={false}
+      transparent={true}
       visible={toVisible}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
