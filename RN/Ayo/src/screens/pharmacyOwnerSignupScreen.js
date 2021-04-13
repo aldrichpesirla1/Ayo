@@ -14,6 +14,7 @@ import json2formdata from 'json2formdata'
 
 import {getSelectSignup, getBusinessPermit} from '../redux/signupScreen/selectors';
 import {setBusinessPermit} from '../redux/signupScreen/actions';
+import usersApi from '../api/Users';
 
 const actionDispatch = (dispatch) => ({
   setBusinessPermit: (valid_id1) => dispatch(setBusinessPermit(valid_id1)),
@@ -38,6 +39,8 @@ const pharmacyOwnerSignUpScreen = () => {
       })();
     }, []);
 
+    
+
     const pickImage = async () => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -50,14 +53,14 @@ const pharmacyOwnerSignUpScreen = () => {
       if (result.cancelled)
         return null;
 
-      setImage(result.uri);
-      setBusinessPermit(result.uri);
+      //setImage(result.uri);
+      //setBusinessPermit(result.uri);
     };
 
     
     return (
         <SafeAreaView style= {styles.Container}>
-          <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
+          <ImageBackground source={require('../backgrounds/AyoSignUp.png')} style={styles.Background}/>
             <View style={styles.ButtonContainer}>
               <View>
                 <View style = {styles.ImagePreviewContainer}>
@@ -70,10 +73,11 @@ const pharmacyOwnerSignUpScreen = () => {
                   <Text style = {styles.ButtonText}>UPLOAD PERMIT</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.SignupButton} onPress = {() => {
-                  const dataToUpload = json2formdata(JSON.stringify(finalval));
-                  console.log("data wack: ", dataToUpload.get('name'));
-                  console.log("sa dili pa musulodskie", JSON.stringify(finalval));
-                  navigation.navigate("Homes")
+                  const formdata = json2formdata(JSON.stringify(finalval));
+                  // usersApi.post('register', formdata, {headers : {
+                  //   'Content-Type': 'multipart/form-data',
+                  // }}).then(err => console.log(err))
+                  navigation.navigate("Confirm");
                 }}>
               <Text style = {styles.ButtonText}>SIGN UP</Text>
             </TouchableOpacity>
@@ -100,7 +104,7 @@ const styles = StyleSheet.create(
       },
       ButtonContainer:{
         width: '100%',
-        height: '70%',
+        height: '65%',
         bottom: 0,
         alignSelf: 'flex-end',
         position: 'absolute',

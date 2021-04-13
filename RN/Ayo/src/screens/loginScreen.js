@@ -1,3 +1,6 @@
+// TODO:
+// - fix redux for this state
+
 import React, {useState} from 'react';
 import {StyleSheet, 
         Text, 
@@ -11,6 +14,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {getUsername, getPassword} from '../redux/loginScreen/selectors';
 import {setUsername, setPassword} from '../redux/loginScreen/actions' 
+import usersApi from '../api/Users';
 
 const actionDispatch = (dispatch) => ({
   setUsername: (username) => dispatch(setUsername(username)),
@@ -35,6 +39,21 @@ const LogInScreen = () => {
   // const [passwordInput, recordPasswordInput] = useState('');//same applies to password
   const navigation = useNavigation();
 
+  const login = async (formdata) => {
+    const response = await usersApi.post('login', formdata, {headers : {
+      'Content-Type': 'multipart/form-data',
+      }})
+
+      const header = {
+        headers:{
+          'Authorization': "Bearer " + response.data.jwt 
+        }
+      }
+      const payload = {
+      }
+    const secondresponse = await usersApi.get('user', payload, header);
+    return (secondresponse);
+  }
 
   return (
     <SafeAreaView style= {styles.Container}>
@@ -59,7 +78,10 @@ const LogInScreen = () => {
           </View>
           <View>
             <TouchableOpacity style = {styles.LoginButton} onPress = {() => {
-              console.log("Login data are: ", username, password);
+              const formdata = new FormData();
+              formdata.append('username', username); 
+              formdata.append('password', password); 
+              login(formdata);
               navigation.navigate("Homes")
             }}>
               <Text style = {styles.ButtonText}>LOG IN</Text>
