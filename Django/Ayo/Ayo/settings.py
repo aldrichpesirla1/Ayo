@@ -85,9 +85,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ayo_django_db',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'admin_db',
+        'USER': 'ayo',
+        'PASSWORD': 'ayo',
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     }
