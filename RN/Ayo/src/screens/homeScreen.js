@@ -16,7 +16,7 @@ export default function homeScreen({navigation}) {
                   <ImageBackground source={require('../backgrounds/AyoDefaultBG.png')} style={styles.Background}/>
                   <View style = {{position: 'absolute'}}>
                         <HomeScreenButtons buttonVals={[
-                              {title: "View Medicine Items", img:icons.homeScreenButton1, screen:"ViewMedItems"},
+                              {title: "View Medicine Items", img:icons.homeScreenButton1, screen:"Product List"},
                               {title: "Screen2", img:icons.homeScreenButton1 },
                               {title: "Screen3", img:icons.homeScreenButton1 }
                         ]}/>

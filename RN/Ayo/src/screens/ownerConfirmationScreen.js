@@ -119,7 +119,7 @@ const confirmationScreen = () => {
 
   const renderItem = ({ item }) => {
     const backgroundColor = item.username === selectedId ? "transparent" : "#ffffff";
-    const color = item.username === selectedId ? 'white' : 'black';
+    const color = item.username === selectedId ? 'black' : 'black';
     return (
       
       // <Item
@@ -130,19 +130,18 @@ const confirmationScreen = () => {
       //   textColor={{ color }}
       // />
       <View style={styles.touchables}>
-                                    <TouchableOpacity item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
-                                        setItemData(item);
-                                        setSelectedId(item.username)
-                                        setModalVisible(!modalVisible);
-                                    }}>
-                                        <Text>{item.name}</Text>
-                                        <Image source={item.valid_id1}
-                                        // <Image source={{uri: item.valid_id1}}
-                                            style={{width:150, height:150}}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-      
+        <TouchableOpacity item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
+            setItemData(item);
+            setSelectedId(item.username)
+            setModalVisible(!modalVisible); 
+        }}>
+            <Text>{item.name}</Text>
+            <Image source={item.valid_id1}
+            // <Image source={{uri: item.valid_id1}}
+                style={{width:150, height:150}}
+            />
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -160,28 +159,8 @@ const confirmationScreen = () => {
             keyExtractor={(item) => item.username}
             extraData={selectedId} //User identifier
           />
-          <Modal 
-                    animationType = "slide"
-                    style = {styles.modal}
-                    transparent
-                    visible={modalVisible}
-                    onRequestClose = {() => {
-                           setModalVisible(false); 
-                    }}
-                >
-                <View>
-                    <View style={styles.modalContainer}>
-                            <View style={styles.modalView}>
-                                <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
-                                        <Fontisto name="close" size={30}/>
-                                </TouchableOpacity>
-                                {/* TAN-AWA NI */}
-                                <VerificationScreen itemData={itemData}/>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
         </SafeAreaView>
+
         {/* <TouchableOpacity style = {styles.ConfirmButton} >
           <Text style = {styles.ButtonText}>CONFIRM USER</Text>
         </TouchableOpacity>  
@@ -189,6 +168,24 @@ const confirmationScreen = () => {
           <Text style = {styles.ButtonText}>VIEW DETAILS</Text>
         </TouchableOpacity>   */}
       </View>
+      <Modal 
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {false}
+            visible={modalVisible}
+            onRequestClose = {() => {
+                    setModalVisible(false); 
+            }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+              <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
+                      <Fontisto name="close" size={30}/>
+              </TouchableOpacity>
+              {/* TAN-AWA NI */}
+              <VerificationScreen itemData={itemData}/>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -218,7 +215,7 @@ const styles = StyleSheet.create(
     },
     ListContainer:{
       width: '80%',
-      height: '60%',
+      height: '75%',
       borderWidth: 4,
       borderRadius: 15,
       borderColor: '#ffffff',
@@ -267,7 +264,6 @@ const styles = StyleSheet.create(
     item: {
       padding: '2.7%',
       borderWidth: 2,
-      borderColor: '#ffffff',
       width: '90%',
       borderRadius: 35,
       marginVertical: '5.2%',
@@ -279,6 +275,7 @@ const styles = StyleSheet.create(
       fontSize: 17,
       fontFamily: 'Roboto',
       letterSpacing: 0.3,
+      color: 'red'
     },
     modal : {
       width: '100%',
@@ -288,20 +285,19 @@ const styles = StyleSheet.create(
       justifyContent: "center"
     },
     modalContainer : {
-          height:'50%',
-          justifyContent: "center",
-          alignItems: "flex-end",
-          flexDirection: 'row',
+      height:'80%',
+      flex: 1
     },
     modalView : {
-          height: '75%',
-          width: '100%',
-          borderWidth: 1,
-          borderColor: "#F2F2F2",
-          //backgroundColor: "#FFFFFF"
+      //backgroundColor: "#FFFFFF"
     },
 touchables: {
-    flexDirection: 'row'
+    alignSelf:'center',
+    alignItems: 'center',
+    width: '90%',
+    margin: '3%',
+    borderRadius: 15,
+    backgroundColor: '#ffffff'
 },
   }
 )

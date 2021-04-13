@@ -13,8 +13,9 @@ import {apiTestScreen,
         pharmacyOwnerSignupScreen, 
         roleSelectScreen, 
         confirmationScreen,
-        homeScreen, 
-        viewMedItemsScreen, 
+        homeScreen,
+        productListScreen, 
+        /* viewMedItemsScreen,*/
         medItemScreen,
         testingscreen,
         customerVerificationScreen} from './src/screens/index';
@@ -29,7 +30,6 @@ export default function App() {
       <NavigationContainer initialRouteName= "Log In">
         <Stack.Navigator>
           {/* <Stack.Screen name ="Testing Screen" component = {testingscreen}/> */}
-          
           <Stack.Screen options={{headerShown: false}} name="Log In" component={loginScreen} />
           <Stack.Screen options={{headerShown: false}} name="Sign Up" component={signupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Select Role" component={roleSelectScreen} />
@@ -42,7 +42,8 @@ export default function App() {
           
           <Stack.Screen name="Api" component={apiTestScreen} />
           <Stack.Screen options={{headerShown: false}} name="Homes" component={homeScreen} />
-          <Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />
+          <Stack.Screen options={{headerShown: false}} name="Product List" component={productListScreen} />
+          {/*<Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />*/}
           <Stack.Screen name="MedItems" component={medItemScreen} />
         </Stack.Navigator>      
       </NavigationContainer>
