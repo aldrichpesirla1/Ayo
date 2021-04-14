@@ -96,16 +96,18 @@ const productList = () => {
     const backgroundColor = item.name === selectedId ? "transparent" : "#ffffff";
     const color = item.name === selectedId ? 'white' : 'black';
     return (
-      <View style={styles.touchables}>
-        <TouchableOpacity item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
+      <View style={styles.touchablesContainer}>
+        <TouchableOpacity style = {styles.touchables} item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
           setItemData(item);
           setModalVisible(!modalVisible); 
           
         }}>
-            <Text>{item.name}</Text>
+            <View>
+              <Text style = {styles.productPreviewText}>{item.name}</Text>
+              <Text style = {styles.productPreviewText}>Price: ₱{item.price}</Text>
+            </View>
             <Image source={item.product_img}
-            // <Image source={{uri: item.valid_id1}}
-                style={{width:150, height:150}}
+                style={styles.productPreviewImage}
             />
         </TouchableOpacity>
       </View>
@@ -116,20 +118,17 @@ const productList = () => {
     <SafeAreaView style= {styles.Container}>
       <ImageBackground source={require('../backgrounds/AyoDefaultBG.png')} style={styles.Background}/>
       <View style = {styles.ContentContainer}>
-      <TouchableOpacity style = {styles.Button} onPress = {() =>{
-        setModal2Visible(!modal2Visible);
-      }}>
-         <Text style = {styles.ButtonText}>ADD PRODUCT</Text>
-      </TouchableOpacity>
-        <Text style={styles.titleText}>
-          PRODUCTS
-        </Text>
         <SafeAreaView style = {styles.ListContainer}>
           <FlatList data={tmpProducts}
                     renderItem={renderItem}
                     keyExtractor={item => item.description}
           />
         </SafeAreaView>
+        <TouchableOpacity style = {styles.Button} onPress = {() =>{
+          setModal2Visible(!modal2Visible);
+        }}>
+         <Text style = {styles.ButtonText}>ADD PRODUCT</Text>
+        </TouchableOpacity>
       </View>
 
       <Modal 
@@ -152,9 +151,8 @@ const productList = () => {
 
       <Modal 
             animationType = "slide"
-            style = {styles.modal}
-            transparent = {true}
             visible={modal2Visible}
+            transparent={true}
             onRequestClose = {() => {
                     setModal2Visible(false); 
             }}>
@@ -163,25 +161,33 @@ const productList = () => {
               <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModal2Visible(!modal2Visible)}>
                       <Fontisto name="close" size={30}/>
               </TouchableOpacity>
-              <View style = {styles.UsernameField}>
+              <View style = {styles.addProductDetailsField}>
+                <Text style = {styles.addProductTitleText}>
+                  ADD PRODUCT
+                </Text>
                 <TextInput
                 placeholder = "Name"
-                placeholderTextColor = '#dcdcdc'
+                placeholderTextColor = '#ffffff'
                 underlineColorAndroid = "transparent"
-                />
-                <TextInput
-                placeholder = "Description"
-                placeholderTextColor = '#dcdcdc'
-                underlineColorAndroid = "transparent"
+                style = {styles.inputField}
                 />
                 <TextInput
                 placeholder = "Price"
-                placeholderTextColor = '#dcdcdc'
+                placeholderTextColor = '#ffffff'
                 underlineColorAndroid = "transparent"
+                style = {styles.inputField}
                 />
-
-                <Button
-                title= 'Add'/>
+                <TextInput
+                placeholder = "Description"
+                placeholderTextColor = '#ffffff'
+                underlineColorAndroid = "transparent"
+                style = {styles.inputField}
+                />
+                <TouchableOpacity style = {styles.addProductButton}>
+                  <Text style = {styles.addProductButtonText}>
+                    ADD
+                  </Text>
+                </TouchableOpacity>
               </View>
               
               
@@ -213,30 +219,28 @@ const styles = StyleSheet.create(
       height: '100%',
       alignSelf: 'center',
       position: 'absolute',
-      justifyContent: 'center',
     },
     titleText: {
       color: '#ffffff',
-      fontSize: 29,
+      fontSize: 30,
       fontFamily: 'Roboto',
       fontWeight: 'bold',
       alignSelf: 'center',
-      marginBottom: '2%',
+      margin: '2%',
       textShadowRadius: 5,
       textShadowOffset: {width: 0, height: 2},
       textShadowColor: 'grey'
     },
     ListContainer:{
-      width: '90%',
-      height: '80%',
-      borderWidth: 4,
-      borderRadius: 15,
+      width: '100%',
+      height: '83%',
+      borderBottomWidth: 4,
       borderColor: '#ffffff',
       backgroundColor: 'rgba(100, 100, 100, 0.5)',
       alignSelf: 'center',
       justifyContent: 'center',
     },
-    UsernameField: {
+    addProductDetailsField: {
       width: '70%',
       padding: '3%',
       borderRadius: 15,
@@ -247,17 +251,32 @@ const styles = StyleSheet.create(
       fontWeight: 'bold',
       fontSize: 17,
       letterSpacing: 1,
+      marginTop: '10%',
       marginBottom: '5%',
       alignSelf:'center',
       position: 'absolute'
     },
-    touchables: {
+    touchablesContainer: {
       alignSelf:'center',
-      alignItems: 'center',
       width: '90%',
       margin: '3%',
       borderRadius: 15,
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+    },
+    touchables: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+    },
+    productPreviewText: {
+      fontSize: 18,
+      fontFamily: 'Roboto',
+    },
+    productPreviewImage: {
+      width:80, 
+      height:80, 
+      marginVertical: '5%'
     },
     item: {
       padding: '2.7%',
@@ -276,36 +295,74 @@ const styles = StyleSheet.create(
       letterSpacing: 0.3,
     },
     Button: {
-      backgroundColor: '#00d1a3',
+      borderWidth: 3,
+      borderColor: '#ffffff',
+      borderRadius: 23,
+      width: '70%',
+      alignSelf:'center',
+      alignItems:'center',
+      marginTop: '6%',
+      padding: '2%'
+    },
+    ButtonText: {
+      color: '#ffffff',
+      fontSize: 20,
+      letterSpacing: 1,
+      fontFamily: 'Roboto',
+      fontWeight: 'bold'
+    },
+    modalContainer : {
+      height: '85%',
+      marginTop: 'auto',
+      backgroundColor:'#ffffff',
+      borderTopWidth: 7,
+      borderTopColor: '#dcdcdc',
+    },
+    modalView : {
+     // backgroundColor: "transparent"
+     //mao ni makacause sa di ma touch ang fontisto nga button
+    },
+    inputField: {
+      width: '100%',
+      padding: '1%',
+      borderRadius: 15,
+      borderWidth: 0.75,
+      borderColor: 'black',
+      backgroundColor: '#dcdcdc',
+      textAlign: 'center',
+      fontFamily: 'Roboto',
+      fontWeight: 'bold',
+      fontSize: 17,
+      letterSpacing: 1,
+      margin: "3.5%",
+      alignSelf:'center'
+    },
+    addProductTitleText: {
+      fontSize: 25,
+      fontFamily: 'Roboto',
+      fontWeight: 'bold',
+      letterSpacing: 0.3,
+      alignSelf: 'center',
+      marginBottom: '7%',
+      color: '#2a2a2a',
+    },
+    addProductButton: {
+      borderWidth: 3,
+      borderColor: '#00d1a3',
+      backgroundColor:  '#00d1a3',
+      borderRadius: 23,
       width: '70%',
       alignSelf:'center',
       alignItems:'center',
       marginTop: '7%',
-      borderRadius: 15,
-      padding: '3%',
-      elevation: 3
+      padding: '2%',
     },
-    ButtonText: {
+    addProductButtonText: {
       color: '#ffffff',
       fontSize: 15,
       letterSpacing: 1,
       fontFamily: 'Roboto',
       fontWeight: 'bold'
-    },
-    modal : {
-      width: '100%',
-      height: '100%',
-      margin: 0,
-      alignItems: "center",
-      justifyContent: "center"
-    },
-    modalContainer : {
-      height:'80%',
-      flex: 1
-    },
-    modalView : {
-     // backgroundColor: "transparent"
-     //mao ni makacause sa di ma touch ang fontisto nga button
     },
   }
 )

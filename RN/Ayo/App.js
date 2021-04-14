@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import {Provider} from 'react-redux';
@@ -36,13 +36,11 @@ export default function App() {
           <Stack.Screen options={{headerShown: false}} name="Customer Sign Up" component={customerSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Staff Sign Up" component={pharmacyStaffSignupScreen} />
           <Stack.Screen options={{headerShown: false}} name="Owner Sign Up" component={pharmacyOwnerSignupScreen} />
-          <Stack.Screen options={{headerShown: false}} name="Verify Customers" component={customerVerificationScreen} />
-          <Stack.Screen options={{headerShown: false}} name="Confirm" component={confirmationScreen} />
-          
-          
+          {/*<Stack.Screen options={{headerShown: false}} name="Verify Customers" component={customerVerificationScreen} />*/}
+          <Stack.Screen options={{headerStatusBarHeight: 30}} name="Verify Customers" component={confirmationScreen} />
           <Stack.Screen name="Api" component={apiTestScreen} />
           <Stack.Screen options={{headerShown: false}} name="Homes" component={homeScreen} />
-          <Stack.Screen options={{headerShown: false}} name="Product List" component={productListScreen} />
+          <Stack.Screen options={{headerStatusBarHeight: 30}} name="Product List" component={productListScreen} />
           {/*<Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />*/}
           <Stack.Screen name="MedItems" component={medItemScreen} />
         </Stack.Navigator>      

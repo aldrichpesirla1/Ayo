@@ -58,39 +58,39 @@ const LogInScreen = () => {
   return (
     <SafeAreaView style= {styles.Container}>
       <ImageBackground source={require('../backgrounds/AyoLandingPage.png')} style={styles.Background}/>
-        <View style={styles.FieldContainer}>
-          <View>
-            <TextInput 
-                placeholder = "Username"
-                placeholderTextColor = '#dcdcdc'
-                underlineColorAndroid = "transparent"
-                onChangeText = {(usernameInput) => setUsername(usernameInput)}
-                style = {styles.UsernameField}/>
-          </View>
-          <View>
-            <TextInput 
-                placeholder = "Password"
-                placeholderTextColor = '#dcdcdc'
-                underlineColorAndroid = "transparent"
-                secureTextEntry
-                onChangeText = {(passwordInput) => setPassword(passwordInput)}
-                style = {styles.PasswordField}/>
-          </View>
-          <View>
-            <TouchableOpacity style = {styles.LoginButton} onPress = {() => {
-              const formdata = new FormData();
-              formdata.append('username', username); 
-              formdata.append('password', password); 
-              login(formdata);
-              navigation.navigate("Homes")
-            }}>
-              <Text style = {styles.ButtonText}>LOG IN</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Sign Up")}>
-              <Text style = {styles.ButtonText}>SIGN UP</Text>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.FieldContainer}>
+        <View>
+          <TextInput 
+              placeholder = "Username"
+              placeholderTextColor = '#dcdcdc'
+              underlineColorAndroid = "transparent"
+              onChangeText = {(usernameInput) => setUsername(usernameInput)}
+              style = {styles.UsernameField}/>
         </View>
+        <View>
+          <TextInput 
+              placeholder = "Password"
+              placeholderTextColor = '#dcdcdc'
+              underlineColorAndroid = "transparent"
+              secureTextEntry
+              onChangeText = {(passwordInput) => setPassword(passwordInput)}
+              style = {styles.PasswordField}/>
+        </View>
+        <View>
+          <TouchableOpacity style = {styles.LoginButton} onPress = {() => {
+            const formdata = new FormData();
+            formdata.append('username', username); 
+            formdata.append('password', password); 
+            login(formdata);
+            navigation.navigate("Homes")
+          }}>
+            <Text style = {styles.ButtonText}>LOG IN</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style = {styles.SignupButton} onPress = {() => navigation.navigate("Sign Up")}>
+            <Text style = {styles.ButtonText}>SIGN UP</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

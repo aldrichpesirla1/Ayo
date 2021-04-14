@@ -9,9 +9,9 @@ export default function ViewProductDetails({itemData}) {
 
       return (
             <View style = {styles.UsernameField}>
-                  <Text>`Name: ${name}`</Text>
-                  <Text>`Description: ${description}`</Text>
-                  <Text>`Price: ${price}`</Text>
+                  <Text>Name: {name}</Text>
+                  <Text>Description: {description}</Text>
+                  <Text>Price: {price}</Text>
                   <Image source={product_img} style={styles.images}/>
             </View>
       )

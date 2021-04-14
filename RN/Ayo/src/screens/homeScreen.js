@@ -14,7 +14,7 @@ export default function homeScreen({navigation}) {
       return (
             <SafeAreaView style = {styles.Container}>
                   <ImageBackground source={require('../backgrounds/AyoDefaultBG.png')} style={styles.Background}/>
-                  <View style = {{position: 'absolute'}}>
+                  <View style = {styles.MenuContainer}>
                         <HomeScreenButtons buttonVals={[
                               {title: "View Medicine Items", img:icons.homeScreenButton1, screen:"Product List"},
                               {title: "Screen2", img:icons.homeScreenButton1 },
@@ -37,17 +37,22 @@ export default function homeScreen({navigation}) {
 
 const styles = StyleSheet.create(
       {
-        Container: {
-          flex: 1
-        },
-        Background: {
-          width: '100%',
-          height: '100%',
-          alignSelf: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          resizeMode: 'cover'
-        },
+            Container: {
+                  flex: 1,
+                  justifyContent: 'center'
+            },
+            Background: {
+                  width: '100%',
+                  height: '100%',
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  resizeMode: 'cover'
+            },
+            MenuContainer: {
+                  position: 'absolute',
+                  alignItems: 'center'
+            }
       }
 )
 
