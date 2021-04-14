@@ -87,6 +87,8 @@ const productList = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [successVisible, setSuccessVisible] = useState(false);
+  const [failVisible, setFailVisible] = useState(false);
   const [itemData, setItemData] = useState(null);
   const [name, setname] = useState(null);
   const [description, setDescription] = useState(null);
@@ -141,10 +143,67 @@ const productList = () => {
             }}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-              <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
+            <View style={styles.header}>
+              <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
                       <Fontisto name="close" size={30}/>
               </TouchableOpacity>
+              </View>
               <ViewProductDetails itemData={itemData}/>
+          </View>
+        </View>
+      </Modal>
+      <Modal 
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {true}
+            visible={successVisible}
+            onRequestClose = {() => {
+                    setSuccessVisible(false); 
+            }}>
+        <View style={styles.modalAddContainer}>
+          <View style={styles.modalView}>
+            <View style={styles.header}>
+              <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setSuccessVisible(!successVisible)}>
+                      <Fontisto name="close" size={30}/>
+              </TouchableOpacity>
+              <Text style={{alignSelf:'center', fontSize:28, fontWeight:'bold'}}> Success! </Text>
+              </View>
+              <View style={{alignItems:'center'}}>
+                <Image source={require('../assets/success.jpg')}
+                style={{height:85, width:100, marginVertical:5}}>
+                </Image>
+              </View>
+              <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
+                Product has been successfully added
+              </Text>
+          </View>
+        </View>
+      </Modal>
+      <Modal 
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {true}
+            visible={failVisible}
+            onRequestClose = {() => {
+                    setFailVisible(false); 
+            }}>
+        <View style={styles.modalAddContainer}>
+          <View style={styles.modalView}>
+            <View style={styles.header}>
+              <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setFailVisible(!failVisible)}>
+                      <Fontisto name="close" size={30}/>
+              </TouchableOpacity>
+              <Text style={{alignSelf:'center', fontSize:25, fontWeight:'bold'}}> Fail! </Text>
+              </View>
+              <View style={{alignItems:'center'}}>
+                <Image source={require('../assets/warning.png')}
+                style={{height:100, width:90, marginVertical:2}}>
+                </Image>
+              </View>
+              <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
+                Product has not been added
+              </Text> 
+              
           </View>
         </View>
       </Modal>
@@ -158,7 +217,7 @@ const productList = () => {
             }}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-              <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModal2Visible(!modal2Visible)}>
+              <TouchableOpacity style={{margin:10, alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setModal2Visible(!modal2Visible)}>
                       <Fontisto name="close" size={30}/>
               </TouchableOpacity>
               <View style = {styles.addProductDetailsField}>
@@ -183,14 +242,16 @@ const productList = () => {
                 underlineColorAndroid = "transparent"
                 style = {styles.inputField}
                 />
-                <TouchableOpacity style = {styles.addProductButton}>
+                <TouchableOpacity style = {styles.addProductButton}
+                onPress = {() =>{
+          setSuccessVisible(!successVisible);
+          //setFailVisible(!failVisible);
+        }}>
                   <Text style = {styles.addProductButtonText}>
                     ADD
                   </Text>
                 </TouchableOpacity>
               </View>
-              
-              
           </View>
         </View>
       </Modal>
@@ -317,6 +378,10 @@ const styles = StyleSheet.create(
       backgroundColor:'#ffffff',
       borderTopWidth: 7,
       borderTopColor: '#dcdcdc',
+      alignItems:'stretch',
+      borderRadius: 20,
+      borderWidth: 5,
+      borderColor: '#00CCAA'
     },
     modalView : {
      // backgroundColor: "transparent"
@@ -364,5 +429,21 @@ const styles = StyleSheet.create(
       fontFamily: 'Roboto',
       fontWeight: 'bold'
     },
+    header:{
+      width:"100%",
+      height:40,
+      alignItems:'flex-end',
+      justifyContent:'center',
+    },
+    modalAddContainer:{
+      height: '25%',
+      width: '85%',
+      marginTop: 'auto',
+      alignItems:'stretch',
+      borderRadius: 20,
+      borderWidth: 5,
+      borderColor: '#00CCAA',
+      alignSelf: 'center'
+    }
   }
 )
