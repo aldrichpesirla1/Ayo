@@ -20,7 +20,7 @@ export default function homeScreen({navigation}) {
                               <Image style = {styles.Icon} source = {require('../assets/icon.png')}></Image>
                               <View style = {styles.UserTextContainer}>
                                     <Text style = {styles.UserText}>Robert A. Johnson</Text>
-                                    <Text style = {styles.UserText}>CUSTOMER</Text>
+                                    <Text style = {styles.UserText}>PHARMACY STAFF</Text>
                               </View>
                               </TouchableOpacity>
                               <TouchableOpacity style = {styles.NotificationsContainer}>
@@ -31,7 +31,7 @@ export default function homeScreen({navigation}) {
                         </View>
                         <HomeScreenButtons buttonVals={[
                               {title: "View Products", img:icons.homeScreenButton1, screen:"Product List"},
-                              {title: "Screen2", img:icons.homeScreenButton1 },
+                              {title: "Confirm Users", img:icons.homeScreenButton1, screen:"Verify Customers"},
                               {title: "Screen3", img:icons.homeScreenButton1 }
                         ]}/>
                         <HomeScreenButtons buttonVals={[
@@ -100,9 +100,10 @@ const styles = StyleSheet.create(
             barGraphic: {
                   width: '90%',
                   height: '1%',
-                  margin: '5%',
+                  marginVertical: '5%',
                   borderRadius: 20,
                   backgroundColor: '#ffffff',
+                  alignSelf: 'center'
             }
       }
 )

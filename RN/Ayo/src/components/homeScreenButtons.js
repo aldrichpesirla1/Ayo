@@ -14,13 +14,13 @@ export default function homeScreenButtons({buttonVals}) {
                               <Text style={styles.title}>{buttonVals[0].title}</Text>
                         </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity style={styles.button} onPress = {() => navigation.navigate(buttonVals[1].screen)}>
                         <View style = {styles.contentContainer}>
                               <Image style={styles.icon} source={buttonVals[1].img}/>
                               <Text style={styles.title}>{buttonVals[1].title}</Text>
                         </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity style={styles.button} onPress = {() => navigation.navigate(buttonVals[2].screen)}>
                         <View style = {styles.contentContainer}>
                               <Image style={styles.icon} source={buttonVals[2].img}/>
                               <Text style={styles.title}>{buttonVals[2].title}</Text>

@@ -168,11 +168,11 @@ const productList = () => {
               </TouchableOpacity>
               <Text style={{alignSelf:'center', fontSize:28, color:"#00B300", letterSpacing: 0.5, fontWeight:'bold'}}> SUCCESS! </Text>
               </View>
-              {/*<View style={{alignItems:'center'}}>
+              <View style={{alignItems:'center'}}>
                 <Image source={require('../assets/success.jpg')}
                 style={{height:85, width:100, marginVertical:5}}>
                 </Image>
-              </View>*/}
+              </View>
               <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
                 Product has been successfully added
               </Text>
@@ -195,11 +195,11 @@ const productList = () => {
               </TouchableOpacity>
               <Text style={{alignSelf:'center', fontSize:25, color:"#E60000", letterSpacing: 3, fontWeight:'bold'}}> FAIL! </Text>
               </View>
-              {/*<View style={{alignItems:'center'}}>
+              <View style={{alignItems:'center'}}>
                 <Image source={require('../assets/warning.png')}
                 style={{height:100, width:90, marginVertical:2}}>
                 </Image>
-              </View>*/}
+              </View>
               <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
                 Product has not been added
               </Text> 

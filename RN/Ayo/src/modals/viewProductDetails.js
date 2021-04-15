@@ -8,19 +8,29 @@ export default function ViewProductDetails({itemData}) {
       const {name, description, price, in_stock, product_img} = itemData;
 
       return (
-            <View style = {styles.UsernameField}>
-                  <Text>Name: {name}</Text>
-                  <Text>Description: {description}</Text>
-                  <Text>Price: {price}</Text>
-                  <Image source={product_img} style={styles.images}/>
+            <View>
+                  <View style = {styles.TopDetailsContainer}>
+                        <View style = {styles.TopTextContainer}>
+                              <Text style = {styles.NameText}>Name: {name}</Text>
+                              <Text>Price: {price}</Text>
+                        </View>
+                        <Image source={product_img} style={styles.images}/>
+                        </View>
+                  <View style = {styles.barGraphic}/>
+                  <View style = {styles.DescriptionContainer}>
+                        <Text>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget dolor felis. Praesent euismod ac lacus nec iaculis. Quisque vel diam risus. Nam facilisis et justo at iaculis. Etiam non sapien eleifend, congue diam porta, vehicula velit. Etiam eu urna erat. Vivamus ac lacus vel turpis auctor dictum. Pellentesque leo justo, tincidunt ac rutrum vel, porttitor vitae dolor. Aenean condimentum orci tellus, non vulputate leo facilisis non. Nulla tempor sagittis dictum.
+                        </Text>
+                  </View>
             </View>
+            
       )
 }
 
 const styles = StyleSheet.create({
       images : {
-            height: 150,
-            width: 150
+            height: 100,
+            width: 100
       },
       quantity : {
             marginVertical: 10,
@@ -32,9 +42,9 @@ const styles = StyleSheet.create({
             borderColor: '#000',
             borderWidth : 1
       },
-      UsernameField: {
-            width: '70%',
-            padding: '3%',
+      TopDetailsContainer: {
+            flexDirection: 'row',
+            width: '90%',
             borderRadius: 15,
             borderColor: '#ffffff',
             backgroundColor: '#ffffff',
@@ -45,7 +55,27 @@ const styles = StyleSheet.create({
             letterSpacing: 1,
             marginBottom: '5%',
             alignSelf:'center',
-            position: 'absolute'
-          },
-      
+            justifyContent: 'space-between'
+      },
+      TopTextContainer:{
+            justifyContent: 'center'
+      },
+      NameText: {
+            fontSize: 17,
+            fontFamily: 'Roboto',
+            fontWeight: 'bold'
+      },
+      DescriptionContainer: {
+            marginTop: '3%',
+            width: '90%',
+            alignSelf: 'center'
+      },
+      barGraphic: {
+            width: '90%',
+            height: '1%',
+            marginVertical: '3%',
+            borderRadius: 20,
+            backgroundColor: 'black',
+            alignSelf: 'center'
+      }
 })

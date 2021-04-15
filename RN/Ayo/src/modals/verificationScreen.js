@@ -16,9 +16,9 @@ export default function verificationScreen({itemData}) {
 
       return (
             <View style = {styles.UsernameField}>
-                  <Text>`Name: ${name}`</Text>
-                  <Text>`Address: ${address}`</Text>
-                  <Text>`Contact Number: ${contact_number}`</Text>
+                  <Text>Name: {name}</Text>
+                  <Text>Address: {address}</Text>
+                  <Text>Contact Number: {contact_number}</Text>
                   <Image source={valid_id1} style={styles.images}/>
                   <View style = {{flex: 1, flexDirection: 'row'}}>
                         <Button  onPress = {() => approve(username)} title='Approve' />
