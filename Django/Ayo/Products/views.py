@@ -101,4 +101,23 @@ class DeletedProduct(APIView):
             product_to_delete.delete()
             return Response("Deleted")
         else:
-            Response("Failed")
+            return Response("Failed")
+
+
+class DeletedProductList(APIView):
+
+    def delete(self, request):
+        for req_id in request.data['ids']:
+            if len(Product.objects.filter(id=req_id)) == 0:
+                return Response("Failed")
+
+        for req_id in request.data['ids']:
+            product_to_delete = Product.objects.filter(
+                id=req_id).first()
+            print(product_to_delete)
+            if product_to_delete != None:
+                product_to_delete.delete()
+            else:
+                Response("Failed")
+
+        return Response("Deleted all")
