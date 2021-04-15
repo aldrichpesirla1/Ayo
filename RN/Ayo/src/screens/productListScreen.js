@@ -168,11 +168,11 @@ const productList = () => {
               </TouchableOpacity>
               <Text style={{alignSelf:'center', fontSize:28, fontWeight:'bold'}}> Success! </Text>
               </View>
-              <View style={{alignItems:'center'}}>
+              {/*<View style={{alignItems:'center'}}>
                 <Image source={require('../assets/success.jpg')}
                 style={{height:85, width:100, marginVertical:5}}>
                 </Image>
-              </View>
+              </View>*/}
               <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
                 Product has been successfully added
               </Text>
@@ -195,11 +195,11 @@ const productList = () => {
               </TouchableOpacity>
               <Text style={{alignSelf:'center', fontSize:25, fontWeight:'bold'}}> Fail! </Text>
               </View>
-              <View style={{alignItems:'center'}}>
+              {/*<View style={{alignItems:'center'}}>
                 <Image source={require('../assets/warning.png')}
                 style={{height:100, width:90, marginVertical:2}}>
                 </Image>
-              </View>
+              </View>*/}
               <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
                 Product has not been added
               </Text> 
@@ -280,17 +280,6 @@ const styles = StyleSheet.create(
       height: '100%',
       alignSelf: 'center',
       position: 'absolute',
-    },
-    titleText: {
-      color: '#ffffff',
-      fontSize: 30,
-      fontFamily: 'Roboto',
-      fontWeight: 'bold',
-      alignSelf: 'center',
-      margin: '2%',
-      textShadowRadius: 5,
-      textShadowOffset: {width: 0, height: 2},
-      textShadowColor: 'grey'
     },
     ListContainer:{
       width: '100%',
@@ -379,8 +368,6 @@ const styles = StyleSheet.create(
       borderTopWidth: 7,
       borderTopColor: '#dcdcdc',
       alignItems:'stretch',
-      borderRadius: 20,
-      borderWidth: 5,
       borderColor: '#00CCAA'
     },
     modalView : {
