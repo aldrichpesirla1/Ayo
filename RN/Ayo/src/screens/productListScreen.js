@@ -166,7 +166,7 @@ const productList = () => {
               <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setSuccessVisible(!successVisible)}>
                       <Fontisto name="close" size={30}/>
               </TouchableOpacity>
-              <Text style={{alignSelf:'center', fontSize:28, fontWeight:'bold'}}> Success! </Text>
+              <Text style={{alignSelf:'center', fontSize:28, color:"#00B300", letterSpacing: 0.5, fontWeight:'bold'}}> SUCCESS! </Text>
               </View>
               {/*<View style={{alignItems:'center'}}>
                 <Image source={require('../assets/success.jpg')}
@@ -193,7 +193,7 @@ const productList = () => {
               <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setFailVisible(!failVisible)}>
                       <Fontisto name="close" size={30}/>
               </TouchableOpacity>
-              <Text style={{alignSelf:'center', fontSize:25, fontWeight:'bold'}}> Fail! </Text>
+              <Text style={{alignSelf:'center', fontSize:25, color:"#E60000", letterSpacing: 3, fontWeight:'bold'}}> FAIL! </Text>
               </View>
               {/*<View style={{alignItems:'center'}}>
                 <Image source={require('../assets/warning.png')}
