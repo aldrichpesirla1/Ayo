@@ -1,5 +1,5 @@
 //TODO: unsure sa design sa add product, and how to add new data 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, 
         Text, 
         View,
@@ -10,9 +10,11 @@ import {StyleSheet,
         Modal,
         Image,
         FlatList,
+        Platform,
         TouchableHighlight,
         Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 import ViewProductDetails from '../modals/viewProductDetails'
 import {Fontisto} from '@expo/vector-icons';
 
@@ -75,7 +77,6 @@ var tmpProducts = [
 }
 ]
 
-
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
     <Text style={[styles.itemText, textColor]}>{item.name}</Text>
@@ -93,6 +94,34 @@ const productList = () => {
   const [name, setname] = useState(null);
   const [description, setDescription] = useState(null);
   const [price, setPrice] = useState(null);
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+  
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
+  
+    console.log(result); //Details of the uploaded image
+  
+    if (result.cancelled)
+      return null;
+  
+    setImage(result.uri); //Do not remove this as this is to display the image
+  };
+  
 
   const renderItem = ({ item }) => {
     const backgroundColor = item.name === selectedId ? "transparent" : "#ffffff";
@@ -217,7 +246,7 @@ const productList = () => {
             }}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-              <TouchableOpacity style={{margin:10, alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setModal2Visible(!modal2Visible)}>
+              <TouchableOpacity style={{margin:10, alignSelf:'flex-end', position: 'relative'}} onPress = {() => setModal2Visible(!modal2Visible)}>
                       <Fontisto name="close" size={30}/>
               </TouchableOpacity>
               <View style = {styles.addProductDetailsField}>
@@ -242,11 +271,20 @@ const productList = () => {
                 underlineColorAndroid = "transparent"
                 style = {styles.inputField}
                 />
+                <View style = {styles.ImagePreviewContainer}>
+                  {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
+                  <Text style = {styles.PlaceholderText}>
+                    ID Photo
+                  </Text> 
+                </View>
+                <TouchableOpacity style = {styles.addProductButton} onPress = {pickImage}>
+                  <Text style = {styles.addProductButtonText}>UPLOAD ID</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style = {styles.addProductButton}
-                onPress = {() =>{
-          setSuccessVisible(!successVisible);
-          //setFailVisible(!failVisible);
-        }}>
+                                  onPress = {() =>{
+                                  setSuccessVisible(!successVisible);
+                                  //setFailVisible(!failVisible);
+                                  }}>
                   <Text style = {styles.addProductButtonText}>
                     ADD
                   </Text>
@@ -301,7 +339,7 @@ const styles = StyleSheet.create(
       fontWeight: 'bold',
       fontSize: 17,
       letterSpacing: 1,
-      marginTop: '10%',
+      marginTop: '3%',
       marginBottom: '5%',
       alignSelf:'center',
       position: 'absolute'
@@ -368,7 +406,6 @@ const styles = StyleSheet.create(
       borderTopWidth: 7,
       borderTopColor: '#dcdcdc',
       alignItems:'stretch',
-      borderColor: '#00CCAA'
     },
     modalView : {
      // backgroundColor: "transparent"
@@ -431,6 +468,30 @@ const styles = StyleSheet.create(
       borderWidth: 5,
       borderColor: '#00CCAA',
       alignSelf: 'center'
-    }
+    },
+    ImagePreviewContainer:{
+      width: '50%',
+      flexDirection: 'row',
+      aspectRatio: 1,
+      elevation: 7,
+      borderWidth: 1,
+      backgroundColor: '#ffffff',
+      alignSelf: 'center',
+      justifyContent: 'center',
+      margin: '3%'
+    },
+    PlaceholderText: {
+      flexShrink: 1,
+      color: '#00d1a3',
+      fontSize: 18,
+      letterSpacing: 1,
+      fontFamily: 'Roboto',
+      fontWeight: 'bold',
+      alignSelf: 'center'
+    },
+    ImagePreview: {
+      aspectRatio: 1,
+      resizeMode: 'contain'
+    },
   }
 )
