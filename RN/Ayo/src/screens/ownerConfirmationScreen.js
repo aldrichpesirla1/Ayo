@@ -12,40 +12,6 @@ import {useNavigation} from '@react-navigation/native';
 import VerificationScreen from '../modals/verificationScreen';
 import {Fontisto} from '@expo/vector-icons';
 
-const DATA = [ //example list for sample
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "1st Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "2nd Item",
-  },
-  {
-    id: "58694a0f-3da1-4f1f-bd96-145571e29d72",
-    title: "3rd Item",
-  },
-  {
-    id: "58694a0f-3da1-461f-bd96-145571e29d73",
-    title: "4th Item",
-  },
-  {
-    id: "58694a0f-3da1-421f-bd96-145571e29d74",
-    title: "5th Item",
-  },
-  {
-    id: "58694a0f-3da1-4a1f-bd96-145571e29d75",
-    title: "6th Item",
-  },
-  {
-    id: "58694a0f-3da1-4b1f-bd96-145571e29d76",
-    title: "7th Item",
-  },
-  {
-    id: "58694a0f-3da1-4c1f-bd96-145571e29d77",
-    title: "8th Item",
-  },
-];
 const tmpUsers = [
   {
       name: "mmm",
@@ -119,30 +85,24 @@ const confirmationScreen = () => {
 
   const renderItem = ({ item }) => {
     const backgroundColor = item.username === selectedId ? "transparent" : "#ffffff";
-    const color = item.username === selectedId ? 'white' : 'black';
+    const color = item.username === selectedId ? 'black' : 'black';
     return (
-      
-      // <Item
-      //   item={item}
-      //   onPress={() => setSelectedId(item.username),
-      //   setModalVisible(!modalVisible)}
-      //   backgroundColor={{ backgroundColor }}
-      //   textColor={{ color }}
-      // />
-      <View style={styles.touchables}>
-                                    <TouchableOpacity item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
-                                        setItemData(item);
-                                        setSelectedId(item.username)
-                                        setModalVisible(!modalVisible);
-                                    }}>
-                                        <Text>{item.name}</Text>
-                                        <Image source={item.valid_id1}
-                                        // <Image source={{uri: item.valid_id1}}
-                                            style={{width:150, height:150}}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-      
+      <View style={styles.touchablesContainer}>
+        <TouchableOpacity style = {styles.touchables} item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
+            setItemData(item);
+            setSelectedId(item.username)
+            setModalVisible(!modalVisible); 
+        }}>
+            <View style = {styles.userPreviewTextContainer}>
+              <Text style = {styles.userPreviewText}>{item.name}</Text>
+              <Text style = {styles.userPreviewText}>{item.address}</Text>
+              <Text style = {styles.userPreviewText}>{item.contact_number}</Text>
+            </View>
+            <Image source={item.valid_id1}
+                style={styles.userPreviewImage}
+            />
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -150,9 +110,6 @@ const confirmationScreen = () => {
     <SafeAreaView style= {styles.Container}>
       <ImageBackground source={require('../backgrounds/AyoDefaultBG.png')} style={styles.Background}/>
       <View style = {styles.ContentContainer}>
-        <Text style={styles.titleText}>
-          USER CONFIRMATION
-        </Text>
         <SafeAreaView style={styles.ListContainer}>
           <FlatList
             data={tmpUsers} //list of users goes here
@@ -160,28 +117,8 @@ const confirmationScreen = () => {
             keyExtractor={(item) => item.username}
             extraData={selectedId} //User identifier
           />
-          <Modal 
-                    animationType = "slide"
-                    style = {styles.modal}
-                    transparent
-                    visible={modalVisible}
-                    onRequestClose = {() => {
-                           setModalVisible(false); 
-                    }}
-                >
-                <View>
-                    <View style={styles.modalContainer}>
-                            <View style={styles.modalView}>
-                                <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
-                                        <Fontisto name="close" size={30}/>
-                                </TouchableOpacity>
-                                {/* TAN-AWA NI */}
-                                <VerificationScreen itemData={itemData}/>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
         </SafeAreaView>
+
         {/* <TouchableOpacity style = {styles.ConfirmButton} >
           <Text style = {styles.ButtonText}>CONFIRM USER</Text>
         </TouchableOpacity>  
@@ -189,6 +126,24 @@ const confirmationScreen = () => {
           <Text style = {styles.ButtonText}>VIEW DETAILS</Text>
         </TouchableOpacity>   */}
       </View>
+      <Modal 
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {false}
+            visible={modalVisible}
+            onRequestClose = {() => {
+                    setModalVisible(false); 
+            }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+              <TouchableOpacity style={{margin:15 , position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
+                      <Fontisto name="close" size={30}/>
+              </TouchableOpacity>
+              {/* TAN-AWA NI */}
+              <VerificationScreen itemData={itemData}/>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -217,11 +172,9 @@ const styles = StyleSheet.create(
       justifyContent: 'center',
     },
     ListContainer:{
-      width: '80%',
-      height: '60%',
-      borderWidth: 4,
-      borderRadius: 15,
-      borderColor: '#ffffff',
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(100, 100, 100, 0.5)',
       alignSelf: 'center',
       justifyContent: 'center',
     },
@@ -253,21 +206,9 @@ const styles = StyleSheet.create(
       fontFamily: 'Roboto',
       fontWeight: 'bold'
     },
-    titleText:{
-      color: '#ffffff',
-      fontSize: 29,
-      fontFamily: 'Roboto',
-      fontWeight: 'bold',
-      alignSelf: 'center',
-      marginBottom: '2%',
-      textShadowRadius: 5,
-      textShadowOffset: {width: 0, height: 2},
-      textShadowColor: 'grey'
-    },
     item: {
       padding: '2.7%',
       borderWidth: 2,
-      borderColor: '#ffffff',
       width: '90%',
       borderRadius: 35,
       marginVertical: '5.2%',
@@ -279,6 +220,7 @@ const styles = StyleSheet.create(
       fontSize: 17,
       fontFamily: 'Roboto',
       letterSpacing: 0.3,
+      color: 'red'
     },
     modal : {
       width: '100%',
@@ -288,20 +230,37 @@ const styles = StyleSheet.create(
       justifyContent: "center"
     },
     modalContainer : {
-          height:'50%',
-          justifyContent: "center",
-          alignItems: "flex-end",
-          flexDirection: 'row',
+      height:'80%',
+      flex: 1
     },
     modalView : {
-          height: '75%',
-          width: '100%',
-          borderWidth: 1,
-          borderColor: "#F2F2F2",
-          //backgroundColor: "#FFFFFF"
+      //backgroundColor: "#FFFFFF"
     },
-touchables: {
-    flexDirection: 'row'
-},
+    touchablesContainer: {
+      alignSelf:'center',
+      width: '90%',
+      margin: '3%',
+      borderRadius: 15,
+      backgroundColor: 'white',
+    },
+    touchables: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    userPreviewTextContainer: {
+      width: '63%',
+      marginLeft: '5%',
+    },
+    userPreviewText: {
+      fontSize: 20,
+      flexWrap : 'wrap',
+      fontFamily: 'Roboto',
+    },
+    userPreviewImage: {
+      width:80, 
+      height:80, 
+      margin: '5%'
+    },
   }
 )
