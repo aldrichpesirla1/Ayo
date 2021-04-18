@@ -1,8 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Modal, Text, ImageBackground, TouchableOpacity, View, Alert,StyleSheet } from 'react-native';
 
-export default function App() {
-  const [modalVisible, setModalVisible] = useState(true);
+export default function App({toVisible, toggle}) {
 
   const modalHeader=(
     <View style={styles.modalHeader}>
@@ -23,7 +22,7 @@ export default function App() {
       <View style={{flexDirection:"row-reverse",margin:10}}>
         <TouchableOpacity style={{...styles.actions,backgroundColor:"red"}} 
           onPress={() => {
-            setModalVisible(!modalVisible);
+            Alert.alert(toggle())
           }}>
           <Text style={styles.actionText}>No</Text>
         </TouchableOpacity>
@@ -47,11 +46,10 @@ export default function App() {
   const modal = (
     <Modal
     animationType="slide"
-      transparent={false}
-      visible={modalVisible}
+      transparent={true}
+      visible={toVisible}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
-        setModalVisible(!modalVisible);
       }}>
       <View style={styles.modal}>
         <View>
@@ -66,7 +64,7 @@ export default function App() {
       
       {modal}
      <ImageBackground 
-      source={require("./assets/AyoLandingPage.png")}
+      source={require("../backgrounds/AyoLandingPage.png")}
       style = {styles.image}
       />
       <Text style={styles.text}>Registration Status</Text>

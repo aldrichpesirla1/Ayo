@@ -39,6 +39,7 @@ class Owner(User):
         verbose_name = "Pharmacy Owner"
 
     def save(self, *args, **kwargs):
+        self.validate_unique()
         self.role = "Owner"
         super(Owner, self).save(*args, **kwargs)
 
@@ -64,6 +65,7 @@ class Customer(User):
         self.save()
 
     def save(self, *args, **kwargs):
+        self.validate_unique()
         self.role = "Customer"
         super(Customer, self).save(*args, **kwargs)
 
@@ -77,6 +79,7 @@ class PharmacyWorker(User):
         verbose_name = "Pharmacy Worker"
 
     def save(self, *args, **kwargs):
+        self.validate_unique()
         if self.medical_license is None and self.role is None:
             self.role = "Assistant"
         else:
