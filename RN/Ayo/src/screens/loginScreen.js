@@ -12,8 +12,8 @@ import {StyleSheet,
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {getUsername, getPassword} from '../redux/loginScreen/selectors';
-import {setUsername, setPassword} from '../redux/loginScreen/actions' 
+import {getUsername, getPassword, getUser} from '../redux/loginScreen/selectors';
+import {setUser, setUsername, setPassword, setJWT} from '../redux/loginScreen/actions' 
 import usersApi from '../api/Users';
 
 import RejectModal from '../modals/RejectModal';
@@ -23,6 +23,8 @@ import VerifiedModal from '../modals/VerifiedModal';
 const actionDispatch = (dispatch) => ({
   setUsername: (username) => dispatch(setUsername(username)),
   setPassword: (password) => dispatch(setPassword(password)),
+  setJWT: (JWT) => dispatch(setJWT(JWT)),
+  setUser: (details) => dispatch(setUser(details))
 })
 
 // being consistent with what is in Django const getLoginData = () => {
@@ -36,8 +38,9 @@ const getLoginData = () => {
 }
 
 const LogInScreen = () => {
-  const {setUsername, setPassword}  = actionDispatch(useDispatch());
+  const {setUser ,setUsername, setPassword, setJWT}  = actionDispatch(useDispatch());
   const {username, password} = getLoginData(); 
+  const User = useSelector(getUser);
   const navigation = useNavigation();
   const [verifyVisible, setVerifyVisible] = useState(false);
   const [rejectVisible, setRejectVisible] = useState(false);
@@ -48,6 +51,9 @@ const LogInScreen = () => {
     const response = await usersApi.post('login', formdata, {headers : {
       'Content-Type': 'multipart/form-data',
       }})
+      
+      console.log("THIS IS THE JWT", response.data.jwt);
+      setJWT(response.data.jwt);
 
       const header = {
         headers:{
@@ -57,9 +63,8 @@ const LogInScreen = () => {
       const payload = {
       }
     const secondresponse = await usersApi.get('user', payload, header);
-    setUserData(secondresponse.data.data)
-
-    console.log(secondresponse);
+    console.log(secondresponse.data.data);
+    setUser(secondresponse.data.data)
     // SUUUUUPER EXPLICIT
     if(secondresponse.data.data['is_verified']){
       toggleVerify();
@@ -108,6 +113,7 @@ const LogInScreen = () => {
           </View>
           <View>
             <TouchableOpacity style = {styles.LoginButton} onPress = {() => {
+              console.log(username, password);
               const formdata = new FormData();
               formdata.append('username', username); 
               formdata.append('password', password); 
