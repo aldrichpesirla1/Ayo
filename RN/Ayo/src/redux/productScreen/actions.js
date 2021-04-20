@@ -1,6 +1,5 @@
 import {ActionTypes} from './constants';
 
-
 export function setName(name) {
       return (
             {
