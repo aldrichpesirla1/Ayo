@@ -1,5 +1,4 @@
 //TODO: unsure sa design sa add product, and how to add new data 
-// Implement screen behavior if blank
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, 
         Text, 
@@ -17,26 +16,68 @@ import {StyleSheet,
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import ViewProductDetails from '../modals/viewProductDetails'
+import AddProductFail from '../modals/addProductFail'
+import AddProductSuccess from '../modals/addProductSuccess'
 import {Fontisto} from '@expo/vector-icons';
-import {useSelector, useDispatch} from 'react-redux';
-import json2formdata from 'json2formdata';
 
-import productApi from '../api/Products';
-import {getProductImg, getSelectProduct} from '../redux/productScreen/selectors';
-import {setDescription, setInStock, setName, setPrice, setProductImg} from '../redux/productScreen/actions' 
-import usersApi from '../api/Users';
-
-import RejectModal from '../modals/RejectModal';
-import WaitingModal from '../modals/WaitingModal';
-import VerifiedModal from '../modals/VerifiedModal'; 
-
-const actionDispatch = (dispatch) => ({
-  setName: (name) => dispatch(setName(name)),
-  setPrice: (price) => dispatch(setPrice(price)),
-  setDescription: (description) => dispatch(setDescription(description)),
-  setInStock: (in_stock) => dispatch(setInStock(in_stock)),
-  setProductImg: (product_img) => dispatch(setProductImg(product_img))
-})
+var tmpProducts = [
+  {
+      name: "biogesic",
+      description: "biogesic",
+      price: 10,
+      //in_stock: true , 
+      product_img: require("../assets/favicon.png")
+  },
+  {
+      name: "bioflu",
+      description: "bioflue",
+      price: 15,
+      //in_stock: true ,
+      product_img: require("../assets/favicon.png")
+  },
+  {
+      name: "maryjane",
+      description: "maryjane",
+      price: 100,
+      //in_stock: true ,
+      product_img: require("../assets/favicon.png")
+  },
+    {
+      name: "paracetamol",
+      description: "paracetamol",
+      price: 20,
+      //in_stock: true ,
+      product_img: require("../assets/favicon.png")
+  },
+    {
+      name: "mefenamic",
+      description: "mefenamic",
+      price: 25,
+      //in_stock: true ,
+      product_img: require("../assets/favicon.png")
+  },
+    {
+      name: "alaxan",
+      description: "alaxan",
+      price: 10,
+      //in_stock: true ,
+      product_img: require("../assets/favicon.png")
+  },
+  {
+    name: "extrajoss",
+    description: "extrajoss",
+      price: 1,
+      //in_stock: true ,
+    product_img: require("../assets/favicon.png")
+},
+{
+  name: "elixir",
+  description: "elixir",
+  price: 200,
+  //in_stock: true ,
+  product_img: require("../assets/favicon.png")
+}
+]
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
@@ -46,20 +87,19 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
 
 const productList = () => {
   const navigation = useNavigation();
+  const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [successVisible, setSuccessVisible] = useState(false);
   const [failVisible, setFailVisible] = useState(false);
-  const {setDescription, setName, setPrice, setInStock, setProductImg} = actionDispatch(useDispatch());
-  const newProduct = useSelector(getSelectProduct);
-  const {name, description, price, in_stock, product_img} = useSelector(getSelectProduct);
-  const [products, setProducts] = useState(null);
   const [itemData, setItemData] = useState(null);
-  // why not place it in addProduct?
+  const [name, setname] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [image, setImage] = useState(null);
+
   useEffect(() => {
     (async () => {
-      const response = await productApi.get('products');
-      setProducts(response.data);
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
@@ -67,7 +107,7 @@ const productList = () => {
         }
       }
     })();
-  }, [modal2Visible]);
+  }, []);
   
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -81,13 +121,13 @@ const productList = () => {
     if (result.cancelled)
       return null;
   
-    setProductImg(result.uri); //Do not remove this as this is to display the image
+    setImage(result.uri); //Do not remove this as this is to display the image
   };
   
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.name === name ? "transparent" : "#ffffff";
-    const color = item.name === name ? 'white' : 'black';
+    const backgroundColor = item.name === selectedId ? "transparent" : "#ffffff";
+    const color = item.name === selectedId ? 'white' : 'black';
     return (
       <View style={styles.touchablesContainer}>
         <TouchableOpacity style = {styles.touchables} item={item} backgroundColor = {{backgroundColor}} textColor = {{color}} onPress = {() => {
@@ -112,7 +152,7 @@ const productList = () => {
       <ImageBackground source={require('../backgrounds/AyoDefaultBG.png')} style={styles.Background}/>
       <View style = {styles.ContentContainer}>
         <SafeAreaView style = {styles.ListContainer}>
-          <FlatList data={products}
+          <FlatList data={tmpProducts}
                     renderItem={renderItem}
                     keyExtractor={item => item.description}
           />
@@ -143,7 +183,7 @@ const productList = () => {
           </View>
         </View>
       </Modal>
-      <Modal 
+     <Modal 
             animationType = "slide"
             style = {styles.modal}
             transparent = {true}
@@ -151,25 +191,17 @@ const productList = () => {
             onRequestClose = {() => {
                     setSuccessVisible(false); 
             }}>
-        <View style={styles.modalAddContainer}>
-          <View style={styles.modalView}>
-            <View style={styles.header}>
-              <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setSuccessVisible(!successVisible)}>
-                      <Fontisto name="close" size={30}/>
-              </TouchableOpacity>
-              <Text style={{alignSelf:'center', fontSize:28, color:"#00B300", letterSpacing: 0.5, fontWeight:'bold'}}> SUCCESS! </Text>
-              </View>
-              <View style={{alignItems:'center'}}>
-                <Image source={require('../assets/success.jpg')}
-                style={{height:85, width:100, marginVertical:5}}>
-                </Image>
-              </View>
-              <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
-                Product has been successfully added
-              </Text>
-          </View>
-        </View>
-      </Modal>
+      <View style={styles.addSuccessContainer}>
+        <AddProductSuccess/>
+        <TouchableOpacity>
+          <Text style={{marginBottom:2,fontSize: 20, color: 'dodgerblue', fontWeight: 'bold', alignSelf: 'flex-end'}} 
+          onPress ={() => setSuccessVisible(!successVisible)}>
+            OK
+          </Text>
+
+        </TouchableOpacity>
+      </View>
+      </Modal> 
       <Modal 
             animationType = "slide"
             style = {styles.modal}
@@ -178,25 +210,16 @@ const productList = () => {
             onRequestClose = {() => {
                     setFailVisible(false); 
             }}>
-        <View style={styles.modalAddContainer}>
-          <View style={styles.modalView}>
-            <View style={styles.header}>
-              <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setFailVisible(!failVisible)}>
-                      <Fontisto name="close" size={30}/>
-              </TouchableOpacity>
-              <Text style={{alignSelf:'center', fontSize:25, color:"#E60000", letterSpacing: 3, fontWeight:'bold'}}> FAIL! </Text>
-              </View>
-              <View style={{alignItems:'center'}}>
-                <Image source={require('../assets/warning.png')}
-                style={{height:100, width:90, marginVertical:2}}>
-                </Image>
-              </View>
-              <Text style={{marginVertical:1, fontSize:20, textAlign:'center'}}>
-                Product has not been added
-              </Text> 
-              
-          </View>
-        </View>
+        <View style={styles.addFailContainer}>
+        <AddProductFail/>
+        <TouchableOpacity>
+          <Text style={{marginBottom:2,fontSize: 20, color: 'dodgerblue', fontWeight: 'bold', alignSelf: 'flex-end'}} 
+          onPress ={() => setFailVisible(!failVisible)}>
+            OK
+          </Text>
+
+        </TouchableOpacity>
+      </View>
       </Modal>
 
       <Modal 
@@ -220,24 +243,21 @@ const productList = () => {
                 placeholderTextColor = '#ffffff'
                 underlineColorAndroid = "transparent"
                 style = {styles.inputField}
-                onChangeText = {(inputTxt) => {setName(inputTxt)}}
                 />
                 <TextInput
                 placeholder = "Price"
                 placeholderTextColor = '#ffffff'
                 underlineColorAndroid = "transparent"
                 style = {styles.inputField}
-                onChangeText = {(price) => {setPrice(price)}}
                 />
                 <TextInput
                 placeholder = "Description"
                 placeholderTextColor = '#ffffff'
                 underlineColorAndroid = "transparent"
                 style = {styles.inputField}
-                onChangeText = {(description) => {setDescription(description)}}
                 />
                 <View style = {styles.ImagePreviewContainer}>
-                  {product_img && <Image source={{ uri: product_img}} style={styles.ImagePreview} />}
+                  {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
                   <Text style = {styles.PlaceholderText}>
                     ID Photo
                   </Text> 
@@ -246,17 +266,9 @@ const productList = () => {
                   <Text style = {styles.addProductButtonText}>UPLOAD ID</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.addProductButton}
-                                  onPress = {async () =>{
-                                    console.log("NEWPRODUCT DATA", newProduct);
-                                    const formdata = json2formdata(JSON.stringify(newProduct));
-                                    console.log(formdata);
-                                    const response = await productApi.post('addproduct', formdata, {headers : {
-                                      'Content-Type': 'multipart/form-data',
-                                    }});
-                                    console.log(response);
-                                    setModal2Visible(!modal2Visible);
-                                    setSuccessVisible(!successVisible);
-                                    //setFailVisible(!failVisible);
+                                  onPress = {() =>{
+                                  setSuccessVisible(!successVisible);
+                                  //setFailVisible(!failVisible);
                                   }}>
                   <Text style = {styles.addProductButtonText}>
                     ADD
@@ -466,5 +478,33 @@ const styles = StyleSheet.create(
       aspectRatio: 1,
       resizeMode: 'contain'
     },
+    modal:{
+      backgroundColor:"#ffff",
+      height: '25%',
+      width: '90%',
+      alignSelf: 'center'
+    },
+    addFailContainer:{
+      backgroundColor: "#ffff",
+      height: '15%',
+      width: '90%',
+      marginTop: 'auto',
+      alignItems:'center',
+      borderRadius: 20,
+      borderWidth: 3,
+      borderColor: 'red',
+      alignSelf: 'center'
+    },
+    addSuccessContainer:{
+      backgroundColor: "#ffff",
+      height: '15%',
+      width: '90%',
+      marginTop: 'auto',
+      alignItems:'center',
+      borderRadius: 20,
+      borderWidth: 5,
+      borderColor: "#00CC00",
+      alignSelf: 'center'
+    }
   }
 )
