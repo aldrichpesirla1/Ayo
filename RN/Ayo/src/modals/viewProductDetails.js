@@ -19,7 +19,7 @@ export default function ViewProductDetails({itemData}) {
                   <View style = {styles.barGraphic}/>
                   <View style = {styles.DescriptionContainer}>
                         <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget dolor felis. Praesent euismod ac lacus nec iaculis. Quisque vel diam risus. Nam facilisis et justo at iaculis. Etiam non sapien eleifend, congue diam porta, vehicula velit. Etiam eu urna erat. Vivamus ac lacus vel turpis auctor dictum. Pellentesque leo justo, tincidunt ac rutrum vel, porttitor vitae dolor. Aenean condimentum orci tellus, non vulputate leo facilisis non. Nulla tempor sagittis dictum.
+                              {description}
                         </Text>
                   </View>
             </View>
