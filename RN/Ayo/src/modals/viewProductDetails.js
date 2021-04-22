@@ -30,7 +30,8 @@ export default function ViewProductDetails({itemData}) {
 const styles = StyleSheet.create({
       images : {
             height: 100,
-            width: 100
+            width: 100,
+            marginRight: '5%'
       },
       quantity : {
             marginVertical: 10,

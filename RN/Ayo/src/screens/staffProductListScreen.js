@@ -1,4 +1,3 @@
-//TODO: unsure sa design sa add product, and how to add new data 
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, 
         Text, 
@@ -12,7 +11,8 @@ import {StyleSheet,
         FlatList,
         Platform,
         TouchableHighlight,
-        Button} from 'react-native';
+        Button,
+        ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import ViewProductDetails from '../modals/viewProductDetails'
@@ -176,10 +176,22 @@ const productList = () => {
           <View style={styles.modalView}>
             <View style={styles.header}>
               <TouchableOpacity style={{margin:15 , alignSelf:'flex-end', position: 'absolute'}} onPress = {() => setModalVisible(!modalVisible)}>
-                      <Fontisto name="close" size={30}/>
+                <Fontisto name="close" size={30}/>
               </TouchableOpacity>
               </View>
-              <ViewProductDetails itemData={itemData}/>
+              <ScrollView style = {styles.productDetailsScrollView}>
+                <ViewProductDetails itemData={itemData}/>
+              </ScrollView>
+              <TouchableOpacity style={styles.editProductButton}>
+                <Text style = {styles.addProductButtonText}>
+                  EDIT PRODUCT
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.deleteProductButton}>
+                <Text style = {styles.deleteProductButtonText}>
+                  DELETE PRODUCT
+                </Text>
+              </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -234,37 +246,43 @@ const productList = () => {
               <TouchableOpacity style={{margin:10, alignSelf:'flex-end', position: 'relative'}} onPress = {() => setModal2Visible(!modal2Visible)}>
                       <Fontisto name="close" size={30}/>
               </TouchableOpacity>
-              <View style = {styles.addProductDetailsField}>
-                <Text style = {styles.addProductTitleText}>
-                  ADD PRODUCT
-                </Text>
-                <TextInput
-                placeholder = "Name"
-                placeholderTextColor = '#ffffff'
-                underlineColorAndroid = "transparent"
-                style = {styles.inputField}
-                />
-                <TextInput
-                placeholder = "Price"
-                placeholderTextColor = '#ffffff'
-                underlineColorAndroid = "transparent"
-                style = {styles.inputField}
-                />
+              <View style = {styles.addProductDetailsContainer}>
+                <View style = {styles.addProductDetailsTopField}>
+                  <View style= {styles.addProductDetailsField}>
+                    <Text style={styles.addProductTitleText}>
+                      ADD PRODUCT
+                    </Text>
+                    <TextInput
+                      placeholder = "Name"
+                      placeholderTextColor = '#ffffff'
+                      underlineColorAndroid = "transparent"
+                      style = {styles.inputField}
+                    />
+                    <TextInput
+                      placeholder = "Price"
+                      placeholderTextColor = '#ffffff'
+                      underlineColorAndroid = "transparent"
+                      style = {styles.inputField}
+                    />
+                  </View>
+                  <View style = {styles.addProductDetailsImages}>
+                    <View style = {styles.ImagePreviewContainer}>
+                      {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
+                      <Text style = {styles.PlaceholderText}>
+                        PRODUCT IMAGE
+                      </Text> 
+                    </View>
+                    <TouchableOpacity style = {styles.addImageButton} onPress = {pickImage}>
+                      <Text style = {styles.addImageButtonText}>UPLOAD</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
                 <TextInput
                 placeholder = "Description"
                 placeholderTextColor = '#ffffff'
                 underlineColorAndroid = "transparent"
-                style = {styles.inputField}
+                style = {styles.inputDescriptionField}
                 />
-                <View style = {styles.ImagePreviewContainer}>
-                  {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
-                  <Text style = {styles.PlaceholderText}>
-                    ID Photo
-                  </Text> 
-                </View>
-                <TouchableOpacity style = {styles.addProductButton} onPress = {pickImage}>
-                  <Text style = {styles.addProductButtonText}>UPLOAD ID</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style = {styles.addProductButton}
                                   onPress = {() =>{
                                   setSuccessVisible(!successVisible);
@@ -313,26 +331,25 @@ const styles = StyleSheet.create(
       alignSelf: 'center',
       justifyContent: 'center',
     },
+    addProductDetailsContainer: {
+      justifyContent: 'center'
+    },
+    addProductDetailsTopField: {
+      flexDirection: 'row',
+      justifyContent: 'space-around'
+    },
     addProductDetailsField: {
-      width: '70%',
-      padding: '3%',
-      borderRadius: 15,
-      borderColor: '#ffffff',
-      backgroundColor: '#ffffff',
-      textAlign: 'center',
-      fontFamily: 'Roboto',
-      fontWeight: 'bold',
-      fontSize: 17,
-      letterSpacing: 1,
-      marginTop: '3%',
-      marginBottom: '5%',
-      alignSelf:'center',
-      position: 'absolute'
+      width: '50%',
+      marginLeft: '5%',
+      justifyContent: 'flex-end'
+    },
+    addProductDetailsImages: {
+      width: '50%',
     },
     touchablesContainer: {
       alignSelf:'center',
-      width: '90%',
-      margin: '3%',
+      width: '95%',
+      margin: '1.5%',
       borderRadius: 15,
       backgroundColor: 'white',
     },
@@ -393,6 +410,7 @@ const styles = StyleSheet.create(
       alignItems:'stretch',
     },
     modalView : {
+      height: '100%'
      // backgroundColor: "transparent"
      //mao ni makacause sa di ma touch ang fontisto nga button
     },
@@ -411,13 +429,29 @@ const styles = StyleSheet.create(
       margin: "3.5%",
       alignSelf:'center'
     },
+    inputDescriptionField: {
+      width: '93%',
+      padding: '1%',
+      height: '40%',
+      borderRadius: 15,
+      borderWidth: 0.75,
+      borderColor: 'black',
+      backgroundColor: '#dcdcdc',
+      textAlign: 'center',
+      fontFamily: 'Roboto',
+      fontWeight: 'bold',
+      fontSize: 17,
+      letterSpacing: 1,
+      marginTop: '6%',
+      alignSelf:'center'
+    },
     addProductTitleText: {
       fontSize: 25,
       fontFamily: 'Roboto',
       fontWeight: 'bold',
       letterSpacing: 0.3,
       alignSelf: 'center',
-      marginBottom: '7%',
+      marginBottom: '5%',
       color: '#2a2a2a',
     },
     addProductButton: {
@@ -428,12 +462,30 @@ const styles = StyleSheet.create(
       width: '70%',
       alignSelf:'center',
       alignItems:'center',
-      marginTop: '7%',
+      marginTop: '6%',
       padding: '2%',
     },
     addProductButtonText: {
       color: '#ffffff',
-      fontSize: 15,
+      fontSize: 18,
+      letterSpacing: 1,
+      fontFamily: 'Roboto',
+      fontWeight: 'bold'
+    },
+    addImageButton: {
+      borderWidth: 3,
+      borderColor: '#00d1a3',
+      backgroundColor:  '#00d1a3',
+      borderRadius: 23,
+      width: 105,
+      alignSelf:'center',
+      alignItems:'center',
+      marginTop: '5%',
+      padding: '1.5%',
+    },
+    addImageButtonText: {
+      color: '#ffffff',
+      fontSize: 14,
       letterSpacing: 1,
       fontFamily: 'Roboto',
       fontWeight: 'bold'
@@ -463,16 +515,17 @@ const styles = StyleSheet.create(
       backgroundColor: '#ffffff',
       alignSelf: 'center',
       justifyContent: 'center',
-      margin: '3%'
+      marginHorizontal: '3%'
     },
     PlaceholderText: {
       flexShrink: 1,
       color: '#00d1a3',
-      fontSize: 18,
+      fontSize: 15,
       letterSpacing: 1,
       fontFamily: 'Roboto',
       fontWeight: 'bold',
-      alignSelf: 'center'
+      alignSelf: 'center',
+      textAlign: 'center'
     },
     ImagePreview: {
       aspectRatio: 1,
@@ -505,6 +558,37 @@ const styles = StyleSheet.create(
       borderWidth: 5,
       borderColor: "#00CC00",
       alignSelf: 'center'
-    }
+    },
+    productDetailsScrollView: {
+      height: '67.5%',
+    },
+    editProductButton: {
+      borderWidth: 3,
+      borderColor: '#00d1a3',
+      backgroundColor:  '#00d1a3',
+      borderRadius: 23,
+      width: '70%',
+      alignSelf:'center',
+      alignItems:'center',
+      marginTop: '3%',
+      padding: '2%',
+    },
+    deleteProductButton: {
+      borderWidth: 3,
+      borderColor: '#00d1a3',
+      borderRadius: 23,
+      width: '70%',
+      alignSelf:'center',
+      alignItems:'center',
+      marginTop: '3%',
+      padding: '2%',
+      marginBottom: '8%'
+    },
+    deleteProductButtonText: {
+      color: 'black',
+      fontSize: 15,
+      fontFamily: 'Roboto',
+      fontWeight: 'bold'
+    },
   }
 )
