@@ -12,21 +12,24 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import json
+
+with open('/etc/djangoconfig.json') as config_file:
+    config = json.load(config_file)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=w8xdcvj1@jvj-6o4g)vw0_9$peg6&eskt31g9v&wvfc&c)-#y'
+SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -85,9 +88,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ayo_django_db',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'admin_db',
+        'USER': 'ayo',
+        'PASSWORD': config['ayosql'],
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     }
@@ -130,6 +133,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATIC_URL = '/static/'
 
 # Base url to serve media files

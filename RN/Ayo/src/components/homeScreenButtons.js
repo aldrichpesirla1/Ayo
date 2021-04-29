@@ -9,16 +9,22 @@ export default function homeScreenButtons({buttonVals}) {
       return (
             <View style={styles.container}>
                   <TouchableOpacity style={styles.button} onPress = {() => navigation.navigate(buttonVals[0].screen)}>
-                        <Image style= {styles.icon} source={buttonVals[0].img}/>
-                        <Text style={styles.title}>{buttonVals[0].title}</Text>
+                        <View style = {styles.contentContainer}>
+                              <Image style= {styles.icon} source={buttonVals[0].img}/>
+                              <Text style={styles.title}>{buttonVals[0].title}</Text>
+                        </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}>
-                        <Image style={styles.icon} source={buttonVals[1].img}/>
-                        <Text style={styles.title}>{buttonVals[1].title}</Text>
+                  <TouchableOpacity style={styles.button} onPress = {() => navigation.navigate(buttonVals[1].screen)}>
+                        <View style = {styles.contentContainer}>
+                              <Image style={styles.icon} source={buttonVals[1].img}/>
+                              <Text style={styles.title}>{buttonVals[1].title}</Text>
+                        </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}>
-                        <Image style={styles.icon} source={buttonVals[2].img}/>
-                        <Text style={styles.title}>{buttonVals[2].title}</Text>
+                  <TouchableOpacity style={styles.button} onPress = {() => navigation.navigate(buttonVals[2].screen)}>
+                        <View style = {styles.contentContainer}>
+                              <Image style={styles.icon} source={buttonVals[2].img}/>
+                              <Text style={styles.title}>{buttonVals[2].title}</Text>
+                        </View>
                   </TouchableOpacity>
             </View>
       )
@@ -28,22 +34,30 @@ const styles = StyleSheet.create({
       container : {
             flexDirection: "row",
             justifyContent: "center",
-            padding: 15,
+            margin: '2%'
       },
       icon : {
             height: 100,
             width: 100
       },
+      contentContainer: {
+            width: 100,
+            flexWrap: 'wrap',
+            alignItems: 'center',
+      },
       button : {
             alignItems: "center",
-            borderWidth: 1,
-            borderColor: 'gray',
-            height: 129,
             borderRadius: 5,
-            marginHorizontal: 10,
+            marginHorizontal: '3%',
+            flexWrap: 'wrap'
       },
       title : {
-            fontSize: 11,
+            margin: '1%',
+            fontFamily: 'Roboto',
+            color: '#ffffff',
+            fontWeight: 'bold',
+            fontSize: 15,
+            textAlign: 'center',
       }
 })
 
