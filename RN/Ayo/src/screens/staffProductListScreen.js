@@ -19,6 +19,7 @@ import ViewProductDetails from '../modals/viewProductDetails'
 import AddProductFail from '../modals/addProductFail'
 import AddProductSuccess from '../modals/addProductSuccess'
 import {Fontisto} from '@expo/vector-icons';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 var tmpProducts = [
   {
@@ -97,6 +98,7 @@ const productList = () => {
   const [description, setDescription] = useState(null);
   const [price, setPrice] = useState(null);
   const [image, setImage] = useState(null);
+  const [dropdownBar, setDropdownBar] = useState('brandname');
 
   useEffect(() => {
     (async () => {
@@ -123,7 +125,6 @@ const productList = () => {
   
     setImage(result.uri); //Do not remove this as this is to display the image
   };
-  
 
   const renderItem = ({ item }) => {
     const backgroundColor = item.name === selectedId ? "transparent" : "#ffffff";
@@ -136,7 +137,8 @@ const productList = () => {
           
         }}>
             <View>
-              <Text style = {styles.productPreviewText}>{item.name}</Text>
+              <Text style = {styles.productPreviewTextHeavy}>{item.name}</Text>
+              <Text style = {styles.productPreviewText}>$Generic Name$</Text>
               <Text style = {styles.productPreviewText}>Price: ₱{item.price}</Text>
             </View>
             <Image source={item.product_img}
@@ -151,6 +153,31 @@ const productList = () => {
     <SafeAreaView style= {styles.Container}>
       <ImageBackground source={require('../backgrounds/AyoDefaultBG.png')} style={styles.Background}/>
       <View style = {styles.ContentContainer}>
+        <View style = {{flexDirection:'row'}}>
+          <TextInput
+            placeholder = "Search"
+            placeholderTextColor = '#dcdcdc'
+            underlineColorAndroid = "transparent"
+            style = {styles.searchBar}
+          />
+          <View style = {styles.dropdownBar}>
+            <DropDownPicker
+                items={[
+                  {label: 'Brand Name', value: 'brandname'},
+                  {label: 'Generic Name', value: 'genericname'},
+                  {label: 'Lowest Price', value: 'priceasc'},
+                  {label: 'Highest Price', value: 'pricedesc'},
+                ]}
+                placeholder = {"Sort"}
+                containerStyle={{height: 40}}
+                itemStyle={{
+                    justifyContent: 'flex-start'
+                }}
+                dropDownStyle={{backgroundColor: '#fafafa'}}
+                onChangeItem={item => setDropdownBar(item.value)}
+            />
+            </View>
+        </View>
         <SafeAreaView style = {styles.ListContainer}>
           <FlatList data={tmpProducts}
                     renderItem={renderItem}
@@ -253,7 +280,13 @@ const productList = () => {
                       ADD PRODUCT
                     </Text>
                     <TextInput
-                      placeholder = "Name"
+                      placeholder = "Brand Name"
+                      placeholderTextColor = '#ffffff'
+                      underlineColorAndroid = "transparent"
+                      style = {styles.inputField}
+                    />
+                    <TextInput
+                      placeholder = "Generic Name"
                       placeholderTextColor = '#ffffff'
                       underlineColorAndroid = "transparent"
                       style = {styles.inputField}
@@ -324,7 +357,7 @@ const styles = StyleSheet.create(
     },
     ListContainer:{
       width: '100%',
-      height: '83%',
+      height: '80%',
       borderBottomWidth: 4,
       borderColor: '#ffffff',
       backgroundColor: 'rgba(100, 100, 100, 0.5)',
@@ -345,6 +378,7 @@ const styles = StyleSheet.create(
     },
     addProductDetailsImages: {
       width: '50%',
+      justifyContent: 'flex-end'
     },
     touchablesContainer: {
       alignSelf:'center',
@@ -360,8 +394,13 @@ const styles = StyleSheet.create(
       justifyContent: 'space-around',
     },
     productPreviewText: {
+      fontSize: 15,
+      fontFamily: 'Roboto',
+    },
+    productPreviewTextHeavy: {
       fontSize: 18,
       fontFamily: 'Roboto',
+      fontWeight: 'bold'
     },
     productPreviewImage: {
       width:80, 
@@ -391,7 +430,7 @@ const styles = StyleSheet.create(
       width: '70%',
       alignSelf:'center',
       alignItems:'center',
-      marginTop: '6%',
+      marginTop: '4%',
       padding: '2%'
     },
     ButtonText: {
@@ -432,7 +471,7 @@ const styles = StyleSheet.create(
     inputDescriptionField: {
       width: '93%',
       padding: '1%',
-      height: '40%',
+      height: '37%',
       borderRadius: 15,
       borderWidth: 0.75,
       borderColor: 'black',
@@ -442,7 +481,7 @@ const styles = StyleSheet.create(
       fontWeight: 'bold',
       fontSize: 17,
       letterSpacing: 1,
-      marginTop: '6%',
+      marginTop: '3%',
       alignSelf:'center'
     },
     addProductTitleText: {
@@ -462,7 +501,7 @@ const styles = StyleSheet.create(
       width: '70%',
       alignSelf:'center',
       alignItems:'center',
-      marginTop: '6%',
+      marginTop: '4%',
       padding: '2%',
     },
     addProductButtonText: {
@@ -477,7 +516,7 @@ const styles = StyleSheet.create(
       borderColor: '#00d1a3',
       backgroundColor:  '#00d1a3',
       borderRadius: 23,
-      width: 105,
+      width: 125,
       alignSelf:'center',
       alignItems:'center',
       marginTop: '5%',
@@ -507,7 +546,7 @@ const styles = StyleSheet.create(
       alignSelf: 'center'
     },
     ImagePreviewContainer:{
-      width: '50%',
+      width: '65%',
       flexDirection: 'row',
       aspectRatio: 1,
       elevation: 7,
@@ -589,6 +628,20 @@ const styles = StyleSheet.create(
       fontSize: 15,
       fontFamily: 'Roboto',
       fontWeight: 'bold'
+    },
+    searchBar: {
+      width: '70%',
+      padding: '1%',
+      borderWidth: 0.75,
+      borderColor: 'black',
+      backgroundColor: 'white',
+      textAlign: 'center',
+      fontFamily: 'Roboto',
+      fontSize: 15,
+    },
+    dropdownBar: {
+      width: '30%',
+      flexDirection: 'column'
     },
   }
 )

@@ -32,9 +32,9 @@ export default function homeScreen({navigation}) {
                         <View style = {styles.barGraphic}>
                         </View>
                         <HomeScreenButtons buttonVals={[
-                              {title: "View Products", img:icons.homeScreenButton1, screen:"Staff Product List"},
+                              {title: "View Products Staff", img:icons.homeScreenButton1, screen:"Staff Product List"},
                               {title: "Confirm Users", img:icons.homeScreenButton1, screen:"Verify Customers"},
-                              {title: "Screen3", img:icons.homeScreenButton1 }
+                              {title: "View Products Customer", img:icons.homeScreenButton1, screen:"Product List"}
                         ]}/>
                         <HomeScreenButtons buttonVals={[
                               {title: "Screen4", img:icons.homeScreenButton1},

@@ -11,7 +11,8 @@ export default function ViewProductDetails({itemData}) {
             <View>
                   <View style = {styles.TopDetailsContainer}>
                         <View style = {styles.TopTextContainer}>
-                              <Text style = {styles.NameText}>Name: {name}</Text>
+                              <Text style = {styles.NameText}>Brand Name: {name}</Text>
+                              <Text>Generic Name: N/A</Text>
                               <Text>Price: {price}</Text>
                         </View>
                         <Image source={product_img} style={styles.images}/>
