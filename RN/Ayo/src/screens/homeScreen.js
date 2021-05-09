@@ -29,8 +29,7 @@ export default function homeScreen({navigation}) {
                                     <Image style = {styles.NotificationIcon} source = {require('../assets/icon.png')}></Image>
                               </TouchableOpacity>
                         </View>
-                        <View style = {styles.barGraphic}>
-                        </View>
+                        <View style = {styles.barGraphic}/>
                         <HomeScreenButtons buttonVals={[
                               {title: "View Products Staff", img:icons.homeScreenButton1, screen:"Staff Product List"},
                               {title: "Confirm Users", img:icons.homeScreenButton1, screen:"Verify Customers"},

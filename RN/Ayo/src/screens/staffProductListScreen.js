@@ -22,8 +22,8 @@ import DeleteProductModal from '../modals/deleteProduct'
 import DeleteProductSuccess from '../modals/deleteProductSuccess'
 import DeleteProductFail from '../modals/deleteProductFail'
 import EditProductModal from '../modals/editProduct'
+import RNPickerSelect from 'react-native-picker-select';
 import {Fontisto} from '@expo/vector-icons';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 var tmpProducts = [
   {
@@ -95,6 +95,7 @@ const productList = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [modal3Visible, setModal3Visible] = useState(false);
   const [successVisible, setSuccessVisible] = useState(false);
   const [failVisible, setFailVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
@@ -106,6 +107,7 @@ const productList = () => {
   const [description, setDescription] = useState(null);
   const [price, setPrice] = useState(null);
   const [image, setImage] = useState(null);
+  const [viewImage, setViewImage] = useState(false);
   const [dropdownBar, setDropdownBar] = useState('brandname');
 
   useEffect(() => {
@@ -119,10 +121,11 @@ const productList = () => {
     })();
   }, []);
   
-  const pickImage = async () => {
+  const pickImage = async () => { //Fuction used to upload images
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
+      aspect: [1, 1],
       quality: 1,
     });
   
@@ -134,7 +137,7 @@ const productList = () => {
     setImage(result.uri); //Do not remove this as this is to display the image
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }) => { //Fuction used to render flatlist items
     const backgroundColor = item.name === selectedId ? "transparent" : "#ffffff";
     const color = item.name === selectedId ? 'white' : 'black';
     return (
@@ -169,25 +172,21 @@ const productList = () => {
             style = {styles.searchBar}
           />
           <View style = {styles.dropdownBar}>
-            <DropDownPicker
-                items={[
-                  {label: 'Brand Name', value: 'brandname'},
-                  {label: 'Generic Name', value: 'genericname'},
-                  {label: 'Lowest Price', value: 'priceasc'},
-                  {label: 'Highest Price', value: 'pricedesc'},
-                ]}
-                placeholder = {"Sort"}
-                containerStyle={{height: 40}}
-                itemStyle={{
-                    justifyContent: 'flex-start'
-                }}
-                dropDownStyle={{backgroundColor: '#fafafa'}}
-                onChangeItem={item => setDropdownBar(item.value)}
+            <RNPickerSelect
+              pickerProps={{ style: {overflow: 'scroll' } }}
+              onValueChange={(dropdownBar) => setDropdownBar(dropdownBar)}
+              items={[
+                  { label: 'Brand Name', value: 'brandname'},
+                  { label: 'Lowest Price', value: 'priceasc' },
+                  { label: 'Highest Price', value: 'pricedesc' },
+              ]}
             />
-            </View>
+          </View>
         </View>
         <SafeAreaView style = {styles.ListContainer}>
-          <FlatList data={tmpProducts}
+          <FlatList data={tmpProducts.sort((a, b) => a.name.localeCompare(b.name))} //sort by brand name ascending
+                    //data={tmpProducts.sort(function(a, b){return a.price-b.price})} //sort by price ascending
+                    //data={tmpProducts.sort(function(a, b){return b.price-a.price})} //sort by price descending
                     renderItem={renderItem}
                     keyExtractor={item => item.description}
           />
@@ -199,7 +198,7 @@ const productList = () => {
         </TouchableOpacity>
       </View>
 
-      <Modal 
+      <Modal //Viewing Product Details modal
             animationType = "slide"
             style = {styles.modal}
             transparent = {true}
@@ -236,6 +235,7 @@ const productList = () => {
           </View>
         </View>
       </Modal>
+
       <Modal //Edit Product Modal
             animationType = "slide"
             style = {styles.modal}
@@ -262,6 +262,7 @@ const productList = () => {
       </View>
       </View>
       </Modal>
+
       <Modal //Delete Product Modal
             animationType = "slide"
             style = {styles.modal}
@@ -289,6 +290,7 @@ const productList = () => {
       </View>
       </View>
       </Modal>
+
      <Modal //Add Product Success Modal
             animationType = "slide"
             style = {styles.modal}
@@ -311,6 +313,7 @@ const productList = () => {
         </TouchableOpacity>
       </View>
       </Modal> 
+
       <Modal //Add Product Fail Modal
             animationType = "slide"
             style = {styles.modal}
@@ -330,6 +333,7 @@ const productList = () => {
         </TouchableOpacity>
       </View>
       </Modal>
+
       <Modal //Delete Success Modal
             animationType = "slide"
             style = {styles.modal}
@@ -350,6 +354,7 @@ const productList = () => {
         </View>
       </View>
       </Modal> 
+
       <Modal //Delete Fail Modal
             animationType = "slide"
             style = {styles.modal}
@@ -370,6 +375,7 @@ const productList = () => {
         </View>
       </View>
       </Modal>
+
       <Modal //Add Product Modal
             animationType = "slide"
             visible={modal2Visible}
@@ -394,11 +400,14 @@ const productList = () => {
                       underlineColorAndroid = "transparent"
                       style = {styles.inputField}
                     />
-                    <TextInput
-                      placeholder = "Generic Name"
-                      placeholderTextColor = '#ffffff'
-                      underlineColorAndroid = "transparent"
+                    <RNPickerSelect
                       style = {styles.inputField}
+                      onValueChange={(value) => console.log(value)}
+                      items={[
+                          { label: 'Brand Name', value: 'brandname' },
+                          { label: 'Lowest Price', value: 'priceasc' },
+                          { label: 'Highest Price', value: 'pricedesc' },
+                      ]}
                     />
                     <TextInput
                       placeholder = "Price"
@@ -406,7 +415,71 @@ const productList = () => {
                       underlineColorAndroid = "transparent"
                       style = {styles.inputField}
                     />
+                    <TextInput
+                      placeholder = "Quantity"
+                      placeholderTextColor = '#ffffff'
+                      underlineColorAndroid = "transparent"
+                      style = {styles.inputField}
+                    />
+                    </View>
+                  <View style = {styles.addProductDetailsImages}>
+                    <TouchableOpacity style = {styles.ImagePreviewContainer} 
+                                      onPress = {() => setViewImage(true)}>
+                      {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
+                      <Text style = {styles.PlaceholderText}>
+                        PRODUCT IMAGE
+                      </Text> 
+                    </TouchableOpacity>
+                    <TouchableOpacity style = {styles.addImageButton} onPress = {pickImage}>
+                      <Text style = {styles.addImageButtonText}>UPLOAD</Text>
+                    </TouchableOpacity>
                   </View>
+                </View>
+                <TextInput
+                placeholder = "Description"
+                placeholderTextColor = '#ffffff'
+                underlineColorAndroid = "transparent"
+                style = {styles.inputDescriptionField}
+                />
+                <TouchableOpacity style = {styles.addProductButton}
+                                  onPress = {() =>{
+                                  setSuccessVisible(!successVisible);
+                                  //setFailVisible(!failVisible);
+                                  }}>
+                  <Text style = {styles.addProductButtonText}>
+                    ADD
+                  </Text>
+                </TouchableOpacity>
+              </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal //Add Generic Name Modal
+            animationType = "slide"
+            visible={modal3Visible}
+            transparent={true}
+            onRequestClose = {() => {
+                    setModal3Visible(false); 
+            }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+              <TouchableOpacity style={{margin:10, alignSelf:'flex-end', position: 'relative'}} onPress = {() => setModal3Visible(!modal3Visible)}>
+                      <Fontisto name="close" size={30}/>
+              </TouchableOpacity>
+              <View style = {styles.addProductDetailsContainer}>
+                <View style = {styles.addProductDetailsTopField}>
+                  <View style= {styles.addProductDetailsField}>
+                    <Text style={styles.addProductTitleText}>
+                      ADD GENERIC MEDICINE
+                    </Text>
+                    <TextInput
+                      placeholder = "Generic Name"
+                      placeholderTextColor = '#ffffff'
+                      underlineColorAndroid = "transparent"
+                      style = {styles.inputField}
+                    />
+                    </View>
                   <View style = {styles.addProductDetailsImages}>
                     <View style = {styles.ImagePreviewContainer}>
                       {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
@@ -438,7 +511,23 @@ const productList = () => {
           </View>
         </View>
       </Modal>
-
+      
+      <Modal //Image Zoom View
+            animationType = "slide"
+            visible={viewImage}
+            transparent={true}
+            onRequestClose = {() => {
+                    setViewImage(false); 
+            }}>
+          <View style = {styles.imageZoomModal}>
+            <TouchableOpacity style={{margin:15 , alignSelf:'flex-end'}} onPress = {() => setViewImage(false)}>
+              <Fontisto name="close" size={30}/>
+            </TouchableOpacity>
+            <View style = {styles.imageZoom}>
+              {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
+            </View>
+          </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -580,7 +669,7 @@ const styles = StyleSheet.create(
     inputDescriptionField: {
       width: '93%',
       padding: '1%',
-      height: '37%',
+      height: '28%',
       borderRadius: 15,
       borderWidth: 0.75,
       borderColor: 'black',
@@ -629,6 +718,7 @@ const styles = StyleSheet.create(
       alignSelf:'center',
       alignItems:'center',
       marginTop: '5%',
+      marginBottom: '3.5%',
       padding: '1.5%',
     },
     addImageButtonText: {
@@ -750,7 +840,8 @@ const styles = StyleSheet.create(
     },
     dropdownBar: {
       width: '30%',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      backgroundColor: '#dcdcdc'
     },
     deleteProductContainer:{
       backgroundColor: "#ffff",
@@ -784,6 +875,21 @@ const styles = StyleSheet.create(
       borderColor: '#00d1a3',
       alignSelf: 'center'
     },
-
-  }
+    imageZoomModal: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#ffffff',
+      borderWidth: 3,
+      borderColor: 'black',
+      marginTop: 'auto',
+      marginBottom: 'auto'
+    },
+    imageZoom: {
+      width: '95%',
+      aspectRatio: 1,
+      elevation: 7,
+      alignSelf: 'center',
+      justifyContent: 'center',
+    },
+  },
 )
