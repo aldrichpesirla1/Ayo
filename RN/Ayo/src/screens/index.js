@@ -10,6 +10,7 @@ import medItemScreen from './medItemScreen';
 import apiTestScreen from './apiTestScreen';
 import testingscreen from './testingscreen';
 import customerVerificationScreen from './customerVerificationScreen';
+import basketScreen from './basketScreen';
 
 
 export {loginScreen, 
@@ -22,4 +23,5 @@ export {loginScreen,
         medItemScreen, 
         apiTestScreen,
         testingscreen,
-        customerVerificationScreen};
+        customerVerificationScreen,
+        basketScreen};
