@@ -16,7 +16,8 @@ import {apiTestScreen,
         /* viewMedItemsScreen,*/
         medItemScreen,
         testingscreen,
-        customerVerificationScreen} from './src/screens/index';
+        customerVerificationScreen,
+      basketScreen,} from './src/screens/index';
 import store from './src/store';
 
 import VerifiedModal from './src/modals/VerifiedModal';
@@ -44,6 +45,7 @@ export default function App() {
                     <Stack.Screen name="Api" component={apiTestScreen} />
           <Stack.Screen options={{headerStatusBarHeight: 30}} name="Product List" component={customerProductListScreen} />
           <Stack.Screen options={{headerStatusBarHeight: 30}} name="Staff Product List" component={staffProductListScreen} />
+          <Stack.Screen options={{headerStatusBarHeight: 30}} name="Medicine Basket" component={basketScreen} />
           {/*<Stack.Screen name="ViewMedItems" component={viewMedItemsScreen} />*/}
           <Stack.Screen name="MedItems" component={medItemScreen} />
         </Stack.Navigator>      
