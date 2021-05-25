@@ -18,8 +18,13 @@ import * as ImagePicker from 'expo-image-picker';
 import ViewProductDetails from '../modals/viewProductDetails'
 import AddProductFail from '../modals/addProductFail'
 import AddProductSuccess from '../modals/addProductSuccess'
+import DeleteProductModal from '../modals/deleteProduct'
+import DeleteProductSuccess from '../modals/deleteProductSuccess'
+import DeleteProductFail from '../modals/deleteProductFail'
+import EditProductModal from '../modals/editProduct'
+import EditQuantity from '../modals/editQuantity'
+import RNPickerSelect from 'react-native-picker-select';
 import {Fontisto} from '@expo/vector-icons';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 var tmpProducts = [
   {
@@ -91,13 +96,19 @@ const productList = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [modal3Visible, setModal3Visible] = useState(false);
   const [successVisible, setSuccessVisible] = useState(false);
   const [failVisible, setFailVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [deleteSuccessVisible, setDeleteSuccessVisible] = useState(false);
+  const [deleteFailVisible, setDeleteFailVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
   const [itemData, setItemData] = useState(null);
   const [name, setname] = useState(null);
   const [description, setDescription] = useState(null);
   const [price, setPrice] = useState(null);
   const [image, setImage] = useState(null);
+  const [viewImage, setViewImage] = useState(false);
   const [dropdownBar, setDropdownBar] = useState('brandname');
 
   useEffect(() => {
@@ -111,10 +122,11 @@ const productList = () => {
     })();
   }, []);
   
-  const pickImage = async () => {
+  const pickImage = async () => { //Fuction used to upload images
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
+      aspect: [1, 1],
       quality: 1,
     });
   
@@ -126,7 +138,7 @@ const productList = () => {
     setImage(result.uri); //Do not remove this as this is to display the image
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }) => { //Fuction used to render flatlist items
     const backgroundColor = item.name === selectedId ? "transparent" : "#ffffff";
     const color = item.name === selectedId ? 'white' : 'black';
     return (
@@ -161,25 +173,21 @@ const productList = () => {
             style = {styles.searchBar}
           />
           <View style = {styles.dropdownBar}>
-            <DropDownPicker
-                items={[
-                  {label: 'Brand Name', value: 'brandname'},
-                  {label: 'Generic Name', value: 'genericname'},
-                  {label: 'Lowest Price', value: 'priceasc'},
-                  {label: 'Highest Price', value: 'pricedesc'},
-                ]}
-                placeholder = {"Sort"}
-                containerStyle={{height: 40}}
-                itemStyle={{
-                    justifyContent: 'flex-start'
-                }}
-                dropDownStyle={{backgroundColor: '#fafafa'}}
-                onChangeItem={item => setDropdownBar(item.value)}
+            <RNPickerSelect
+              pickerProps={{ style: {overflow: 'scroll' } }}
+              onValueChange={(dropdownBar) => setDropdownBar(dropdownBar)}
+              items={[
+                  { label: 'Brand Name', value: 'brandname'},
+                  { label: 'Lowest Price', value: 'priceasc' },
+                  { label: 'Highest Price', value: 'pricedesc' },
+              ]}
             />
-            </View>
+          </View>
         </View>
         <SafeAreaView style = {styles.ListContainer}>
-          <FlatList data={tmpProducts}
+          <FlatList data={tmpProducts.sort((a, b) => a.name.localeCompare(b.name))} //sort by brand name ascending
+                    //data={tmpProducts.sort(function(a, b){return a.price-b.price})} //sort by price ascending
+                    //data={tmpProducts.sort(function(a, b){return b.price-a.price})} //sort by price descending
                     renderItem={renderItem}
                     keyExtractor={item => item.description}
           />
@@ -191,7 +199,7 @@ const productList = () => {
         </TouchableOpacity>
       </View>
 
-      <Modal 
+      <Modal //Viewing Product Details modal
             animationType = "slide"
             style = {styles.modal}
             transparent = {true}
@@ -209,12 +217,18 @@ const productList = () => {
               <ScrollView style = {styles.productDetailsScrollView}>
                 <ViewProductDetails itemData={itemData}/>
               </ScrollView>
-              <TouchableOpacity style={styles.editProductButton}>
+              <TouchableOpacity style={styles.editProductButton}
+                                  onPress = {() =>{
+                                  setEditVisible(!editVisible)
+                                }}>
                 <Text style = {styles.addProductButtonText}>
                   EDIT PRODUCT
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.deleteProductButton}>
+              <TouchableOpacity style={styles.deleteProductButton}
+                                  onPress = {() =>{
+                                  setDeleteVisible(!deleteVisible)
+                                }}>
                 <Text style = {styles.deleteProductButtonText}>
                   DELETE PRODUCT
                 </Text>
@@ -222,7 +236,63 @@ const productList = () => {
           </View>
         </View>
       </Modal>
-     <Modal 
+
+      <Modal //Edit Product Modal
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {true}
+            visible={editVisible}
+            onRequestClose = {() => {
+                    setEditVisible(false); 
+            }}>
+      <View style={styles.editProductContainer}>
+        <EditProductModal/>
+        <View style={{flexDirection:"row-reverse",margin:10, position:'absolute'}}>
+        <TouchableOpacity style={{ borderRadius:5,marginHorizontal:10,marginTop:330,paddingVertical:10,paddingHorizontal:50,backgroundColor:"#00d1a3"}}
+         onPress={() => {
+          setEditVisible(!editVisible)
+          }}>
+          <Text style={{color: "#ffff", alignSelf: 'center'}}>SAVE</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{borderRadius:5,marginHorizontal:10,marginTop:330, paddingVertical:10,paddingHorizontal:40, backgroundColor:'lightgray'}} 
+          onPress={() => {
+            setEditVisible(!editVisible)
+          }}>
+          <Text style={{color:'gray'}}>CANCEL</Text>
+        </TouchableOpacity>
+      </View>
+      </View>
+      </Modal>
+
+      <Modal //Delete Product Modal
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {true}
+            visible={deleteVisible}
+            onRequestClose = {() => {
+                    setDeleteVisible(false); 
+            }}>
+      <View style={styles.deleteProductContainer}>
+     <DeleteProductModal/>
+        <View style={{flexDirection:"row-reverse",margin:10}}>
+        <TouchableOpacity style={{ borderRadius:5,marginHorizontal:10,marginVertical: 5,paddingVertical:10,paddingHorizontal:30,backgroundColor:"#00d1a3"}}
+         onPress={() => {
+          //setDeleteFailVisible(!deleteFailVisible)
+          setDeleteSuccessVisible(!deleteSuccessVisible)
+          }}>
+          <Text style={{color: "#ffff", alignSelf: 'center'}}>CONTINUE</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{borderRadius:5,marginHorizontal:10,marginVertical: 5, paddingVertical:10,paddingHorizontal:30, backgroundColor:'lightgray'}} 
+          onPress={() => {
+            setDeleteVisible(!deleteVisible)
+          }}>
+          <Text style={{color:'gray'}}>CANCEL</Text>
+        </TouchableOpacity>
+      </View>
+      </View>
+      </Modal>
+
+     <Modal //Add Product Success Modal
             animationType = "slide"
             style = {styles.modal}
             transparent = {true}
@@ -232,16 +302,21 @@ const productList = () => {
             }}>
       <View style={styles.addSuccessContainer}>
         <AddProductSuccess/>
+        {/*//setTimeout(() => 
+          //setSuccessVisible(false), 3000);*/}
         <TouchableOpacity>
-          <Text style={{marginBottom:2,fontSize: 20, color: 'dodgerblue', fontWeight: 'bold', alignSelf: 'flex-end'}} 
-          onPress ={() => setSuccessVisible(!successVisible)}>
+          <Text style={{marginBottom:2,fontSize: 20, color: 'dodgerblue', fontWeight: 'bold', marginBottom: 1, alignSelf: 'flex-end'}} 
+          onPress ={() =>
+            setSuccessVisible(!successVisible)
+          }>
             OK
           </Text>
 
         </TouchableOpacity>
       </View>
       </Modal> 
-      <Modal 
+
+      <Modal //Add Product Fail Modal
             animationType = "slide"
             style = {styles.modal}
             transparent = {true}
@@ -261,7 +336,49 @@ const productList = () => {
       </View>
       </Modal>
 
-      <Modal 
+      <Modal //Delete Success Modal
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {true}
+            visible={deleteSuccessVisible}
+            onRequestClose = {() => {
+                    setDeleteSuccessVisible(false); 
+            }}>
+      <View style={styles.deleteSuccessContainer}>
+        <DeleteProductSuccess/>
+        <View style={{ marginLeft:100, marginTop: 40}}>
+        <TouchableOpacity>
+          <Text style={{fontSize: 25, color: 'dodgerblue', fontWeight: 'bold'}} 
+          onPress ={() => setDeleteSuccessVisible(!deleteSuccessVisible)}>
+            OK
+          </Text>
+        </TouchableOpacity>
+        </View>
+      </View>
+      </Modal> 
+
+      <Modal //Delete Fail Modal
+            animationType = "slide"
+            style = {styles.modal}
+            transparent = {true}
+            visible={deleteFailVisible}
+            onRequestClose = {() => {
+                    setDeleteFailVisible(false); 
+            }}>
+      <View style={styles.deleteSuccessContainer}>
+        <DeleteProductFail/>
+        <View style={{ marginLeft:80, marginTop: 40}}>
+        <TouchableOpacity>
+          <Text style={{fontSize: 25, color: 'dodgerblue', fontWeight: 'bold'}} 
+          onPress ={() => setDeleteFailVisible(!deleteFailVisible)}>
+            OK
+          </Text>
+        </TouchableOpacity>
+        </View>
+      </View>
+      </Modal>
+
+      <Modal //Add Product Modal
             animationType = "slide"
             visible={modal2Visible}
             transparent={true}
@@ -285,11 +402,14 @@ const productList = () => {
                       underlineColorAndroid = "transparent"
                       style = {styles.inputField}
                     />
-                    <TextInput
-                      placeholder = "Generic Name"
-                      placeholderTextColor = '#ffffff'
-                      underlineColorAndroid = "transparent"
+                    <RNPickerSelect
                       style = {styles.inputField}
+                      onValueChange={(value) => console.log(value)}
+                      items={[
+                          { label: 'Brand Name', value: 'brandname' },
+                          { label: 'Lowest Price', value: 'priceasc' },
+                          { label: 'Highest Price', value: 'pricedesc' },
+                      ]}
                     />
                     <TextInput
                       placeholder = "Price"
@@ -297,7 +417,66 @@ const productList = () => {
                       underlineColorAndroid = "transparent"
                       style = {styles.inputField}
                     />
+                    <EditQuantity/>
+                    </View>
+                  <View style = {styles.addProductDetailsImages}>
+                    <TouchableOpacity style = {styles.ImagePreviewContainer} 
+                                      onPress = {() => setViewImage(true)}>
+                      {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
+                      <Text style = {styles.PlaceholderText}>
+                        PRODUCT IMAGE
+                      </Text> 
+                    </TouchableOpacity>
+                    <TouchableOpacity style = {styles.addImageButton} onPress = {pickImage}>
+                      <Text style = {styles.addImageButtonText}>UPLOAD</Text>
+                    </TouchableOpacity>
                   </View>
+                </View>
+                <TextInput
+                placeholder = "Description"
+                placeholderTextColor = '#ffffff'
+                underlineColorAndroid = "transparent"
+                style = {styles.inputDescriptionField}
+                />
+                <TouchableOpacity style = {styles.addProductButton}
+                                  onPress = {() =>{
+                                  setSuccessVisible(!successVisible);
+                                  //setFailVisible(!failVisible);
+                                  }}>
+                  <Text style = {styles.addProductButtonText}>
+                    ADD
+                  </Text>
+                </TouchableOpacity>
+              </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal //Add Generic Name Modal
+            animationType = "slide"
+            visible={modal3Visible}
+            transparent={true}
+            onRequestClose = {() => {
+                    setModal3Visible(false); 
+            }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+              <TouchableOpacity style={{margin:10, alignSelf:'flex-end', position: 'relative'}} onPress = {() => setModal3Visible(!modal3Visible)}>
+                      <Fontisto name="close" size={30}/>
+              </TouchableOpacity>
+              <View style = {styles.addProductDetailsContainer}>
+                <View style = {styles.addProductDetailsTopField}>
+                  <View style= {styles.addProductDetailsField}>
+                    <Text style={styles.addProductTitleText}>
+                      ADD GENERIC MEDICINE
+                    </Text>
+                    <TextInput
+                      placeholder = "Generic Name"
+                      placeholderTextColor = '#ffffff'
+                      underlineColorAndroid = "transparent"
+                      style = {styles.inputField}
+                    />
+                    </View>
                   <View style = {styles.addProductDetailsImages}>
                     <View style = {styles.ImagePreviewContainer}>
                       {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
@@ -329,7 +508,23 @@ const productList = () => {
           </View>
         </View>
       </Modal>
-
+      
+      <Modal //Image Zoom View
+            animationType = "slide"
+            visible={viewImage}
+            transparent={true}
+            onRequestClose = {() => {
+                    setViewImage(false); 
+            }}>
+          <View style = {styles.imageZoomModal}>
+            <TouchableOpacity style={{margin:15 , alignSelf:'flex-end'}} onPress = {() => setViewImage(false)}>
+              <Fontisto name="close" size={30}/>
+            </TouchableOpacity>
+            <View style = {styles.imageZoom}>
+              {image && <Image source={{ uri: image }} style={styles.ImagePreview} />}
+            </View>
+          </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -471,7 +666,7 @@ const styles = StyleSheet.create(
     inputDescriptionField: {
       width: '93%',
       padding: '1%',
-      height: '37%',
+      height: '28%',
       borderRadius: 15,
       borderWidth: 0.75,
       borderColor: 'black',
@@ -520,6 +715,7 @@ const styles = StyleSheet.create(
       alignSelf:'center',
       alignItems:'center',
       marginTop: '5%',
+      marginBottom: '3.5%',
       padding: '1.5%',
     },
     addImageButtonText: {
@@ -595,7 +791,7 @@ const styles = StyleSheet.create(
       alignItems:'center',
       borderRadius: 20,
       borderWidth: 5,
-      borderColor: "#00CC00",
+      borderColor: "#00d1a3",
       alignSelf: 'center'
     },
     productDetailsScrollView: {
@@ -641,7 +837,56 @@ const styles = StyleSheet.create(
     },
     dropdownBar: {
       width: '30%',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      backgroundColor: '#dcdcdc'
     },
-  }
+    deleteProductContainer:{
+      backgroundColor: "#ffff",
+      height: '20%',
+      width: '80%',
+      marginTop: 'auto',
+      marginBottom: 290,
+      alignItems:'center',
+      borderRadius: 20,
+      borderWidth: 2,
+      borderColor: 'red',
+      alignSelf: 'center'
+    },
+    deleteSuccessContainer:{
+      backgroundColor: "#00000999",
+      height: '10%',
+      width: '100%',
+      marginTop: 'auto',
+      alignSelf: 'center',
+      flexDirection:'row',
+    },
+    editProductContainer:{
+      backgroundColor: "#ffff",
+      height: '50%',
+      width: '90%',
+      marginTop: 'auto',
+      marginBottom: 40,
+      alignItems:'center',
+      borderRadius: 20,
+      borderWidth: 2,
+      borderColor: '#00d1a3',
+      alignSelf: 'center'
+    },
+    imageZoomModal: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#ffffff',
+      borderWidth: 3,
+      borderColor: 'black',
+      marginTop: 'auto',
+      marginBottom: 'auto'
+    },
+    imageZoom: {
+      width: '95%',
+      aspectRatio: 1,
+      elevation: 7,
+      alignSelf: 'center',
+      justifyContent: 'center',
+    },
+  },
 )
